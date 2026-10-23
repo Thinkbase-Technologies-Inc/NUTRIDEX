@@ -1,0 +1,25 @@
+{
+  "name": "NutriDex — Equivalencias claras. Nutrición inteligente.",
+  "short_name": "NutriDex",
+  "description": "Consulta alimentos, descubre sus equivalencias y organiza tus porciones desde una sola plataforma.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F8FAF8",
+  "theme_color": "#147D64",
+  "lang": "es",
+  "icons": [
+    {
+      "src": "/icons/nutridex.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/nutridex.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

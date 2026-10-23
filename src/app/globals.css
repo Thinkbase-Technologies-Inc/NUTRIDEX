@@ -1,0 +1,96 @@
+@import "tailwindcss";
+@import "@heroui/styles";
+
+:root {
+  /* Brand / semantic tokens */
+  --nutridex-primary: #147d64;
+  --nutridex-primary-hover: #10664f;
+  --nutridex-primary-soft: #e8f5ef;
+
+  --nutridex-background: #f8faf8;
+  --nutridex-surface: #ffffff;
+  --nutridex-surface-muted: #f1f5f2;
+
+  --nutridex-text-primary: #172922;
+  --nutridex-text-secondary: #67766e;
+
+  --nutridex-border: #e3ebe5;
+
+  --nutridex-success: #168765;
+  --nutridex-warning: #cc8a31;
+  --nutridex-danger: #cd5555;
+}
+
+[data-theme="dark"] {
+  /* Dark palette - authentic, not simple inversion */
+  --nutridex-background: #0f1410;
+  --nutridex-surface: #161d19;
+  --nutridex-surface-muted: #1c2521;
+  --nutridex-text-primary: #e8f0ea;
+  --nutridex-text-secondary: #a9b8ad;
+  --nutridex-border: #2d3731;
+  --nutridex-primary-soft: #0e2a20;
+  --nutridex-success: #2fb08f;
+  --nutridex-warning: #e6a14a;
+  --nutridex-danger: #e67c7c;
+}
+
+@theme inline {
+  --color-nutridex-primary: var(--nutridex-primary);
+  --color-nutridex-primary-hover: var(--nutridex-primary-hover);
+  --color-nutridex-primary-soft: var(--nutridex-primary-soft);
+  --color-nutridex-background: var(--nutridex-background);
+  --color-nutridex-surface: var(--nutridex-surface);
+  --color-nutridex-surface-muted: var(--nutridex-surface-muted);
+  --color-nutridex-text-primary: var(--nutridex-text-primary);
+  --color-nutridex-text-secondary: var(--nutridex-text-secondary);
+  --color-nutridex-border: var(--nutridex-border);
+  --color-nutridex-success: var(--nutridex-success);
+  --color-nutridex-warning: var(--nutridex-warning);
+  --color-nutridex-danger: var(--nutridex-danger);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--nutridex-background);
+  color: var(--nutridex-text-primary);
+  font-family: var(--font-sans);
+  font-feature-settings: "tnum" 1, "lnum" 0;
+  font-variant-numeric: tabular-nums;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.reduce-motion *,
+* [data-reduced-motion],
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
