@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 100" fill="none">
+  <defs>
+    <linearGradient id="thinkbase-gradient" x1="7" y1="8" x2="88" y2="92" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#14E4F4"/>
+      <stop offset=".48" stop-color="#124BFF"/>
+      <stop offset="1" stop-color="#C84BFF"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(4 0)">
+    <path d="M15 12H70C88 12 94 31 80 43L31 84H82" stroke="url(#thinkbase-gradient)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M17 47V82M18 48L47 24" stroke="url(#thinkbase-gradient)" stroke-width="14" stroke-linecap="round"/>
+  </g>
+  <text x="118" y="66" fill="#172922" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="600" letter-spacing="-2">Think<tspan font-weight="400" fill="#67766E">Base</tspan></text>
+</svg>
