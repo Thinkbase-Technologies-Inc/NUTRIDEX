@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/shared/ThemeProvider";
 import { AppSidebar } from "@/components/layout/AppSidebar";
 import { MobileBottomNavigation } from "@/components/layout/MobileBottomNavigation";
+import { SiteFooter } from "@/components/layout/SiteFooter";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -55,9 +56,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           </a>
           <div className="flex min-h-dvh w-full">
             <AppSidebar />
-            <main id="main-content" className="flex-1 min-w-0 pb-24 md:pb-0 md:pl-[260px]">
-              {children}
-            </main>
+            <div className="flex min-h-dvh min-w-0 flex-1 flex-col md:pl-[260px]">
+              <main id="main-content" className="flex-1 min-w-0 pb-24 md:pb-0">
+                {children}
+              </main>
+              <SiteFooter />
+            </div>
           </div>
           <MobileBottomNavigation />
         </ThemeProvider>

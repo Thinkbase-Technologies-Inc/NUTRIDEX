@@ -1,5 +1,6 @@
 import { Info } from "lucide-react";
 import { NutriDexLogo } from "@/components/ui/Logo";
+import { ThinkBaseLogo } from "@/components/ui/ThinkBaseLogo";
 
 export const metadata = {
   title: "Acerca de",
@@ -8,11 +9,27 @@ export const metadata = {
 export default function AcercaDePage() {
   return (
     <div className="mx-auto w-full max-w-2xl px-4 py-8 md:px-8 md:py-12">
-      <div className="flex items-center gap-3">
-        <NutriDexLogo size={40} />
-        <div>
-          <h1 className="text-2xl font-bold text-nutridex-text-primary">NutriDex</h1>
-          <p className="text-sm text-nutridex-text-secondary">Equivalencias claras. Nutrición inteligente.</p>
+      <div className="rounded-2xl border border-nutridex-border bg-nutridex-surface p-6 sm:p-8">
+        <div className="flex flex-wrap items-center justify-between gap-5">
+          <div className="flex items-center gap-3">
+            <NutriDexLogo size={44} />
+            <div>
+              <h1 className="text-2xl font-bold tracking-tight text-nutridex-text-primary">NutriDex</h1>
+              <p className="text-sm text-nutridex-text-secondary">Equivalencias claras. Nutrición inteligente.</p>
+            </div>
+          </div>
+          <span className="rounded-full border border-nutridex-border px-3 py-1 text-xs font-medium text-nutridex-text-secondary">
+            HealthTech · Food Intelligence
+          </span>
+        </div>
+        <div className="mt-7 flex flex-col gap-3 border-t border-nutridex-border pt-5 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-nutridex-text-secondary">Producto desarrollado con</p>
+            <p className="mt-1 text-sm text-nutridex-text-primary">Tecnología y diseño digital de ThinkBase</p>
+          </div>
+          <div className="rounded-xl border border-nutridex-border bg-nutridex-background px-4 py-3">
+            <ThinkBaseLogo markSize={32} />
+          </div>
         </div>
       </div>
 
