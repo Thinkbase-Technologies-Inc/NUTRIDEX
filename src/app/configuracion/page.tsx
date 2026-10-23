@@ -79,10 +79,13 @@ export default function ConfiguracionPage() {
   }, [setFavorites]);
 
   return (
-    <div className="mx-auto w-full max-w-2xl px-4 py-8 md:px-8 md:py-12">
+    <div className="mx-auto w-full max-w-2xl px-5 py-8 md:px-10 md:py-12">
       <header>
-        <h1 className="text-2xl font-bold text-nutridex-text-primary">Configuración</h1>
-        <p className="mt-1 text-sm text-nutridex-text-secondary">Preferencias y gestión de datos</p>
+        <p className="text-sm font-medium text-nutridex-primary">A tu manera</p>
+        <h1 className="mt-2 text-[30px] font-bold tracking-tight text-nutridex-text-primary md:text-4xl">
+          Configuración
+        </h1>
+        <p className="mt-2 text-sm text-nutridex-text-secondary">Preferencias y gestión de datos</p>
       </header>
 
       {message && (
@@ -115,7 +118,7 @@ export default function ConfiguracionPage() {
               type="button"
               onClick={() => setTheme(mode)}
               aria-pressed={theme === mode}
-              className={`rounded-lg border px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-nutridex-primary ${
+              className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-nutridex-primary ${
                 theme === mode
                   ? "border-nutridex-primary bg-nutridex-primary text-white"
                   : "border-nutridex-border bg-nutridex-surface text-nutridex-text-secondary hover:bg-nutridex-surface-muted"
@@ -137,7 +140,7 @@ export default function ConfiguracionPage() {
           <button
             type="button"
             onClick={handleExport}
-            className="inline-flex items-center gap-2 rounded-xl border border-nutridex-border bg-nutridex-surface px-4 py-2.5 text-sm font-medium text-nutridex-text-primary transition-colors hover:bg-nutridex-surface-muted focus-visible:outline-2 focus-visible:outline-nutridex-primary focus-visible:outline-offset-2"
+            className="inline-flex items-center gap-2 rounded-full border border-nutridex-border bg-nutridex-surface px-4 py-2.5 text-sm font-medium text-nutridex-text-primary transition-colors hover:bg-nutridex-surface-muted focus-visible:outline-2 focus-visible:outline-nutridex-primary focus-visible:outline-offset-2"
           >
             <Download className="h-4 w-4" aria-hidden />
             Exportar respaldo
@@ -145,7 +148,7 @@ export default function ConfiguracionPage() {
           <button
             type="button"
             onClick={() => fileRef.current?.click()}
-            className="inline-flex items-center gap-2 rounded-xl border border-nutridex-border bg-nutridex-surface px-4 py-2.5 text-sm font-medium text-nutridex-text-primary transition-colors hover:bg-nutridex-surface-muted focus-visible:outline-2 focus-visible:outline-nutridex-primary focus-visible:outline-offset-2"
+            className="inline-flex items-center gap-2 rounded-full border border-nutridex-border bg-nutridex-surface px-4 py-2.5 text-sm font-medium text-nutridex-text-primary transition-colors hover:bg-nutridex-surface-muted focus-visible:outline-2 focus-visible:outline-nutridex-primary focus-visible:outline-offset-2"
           >
             <Upload className="h-4 w-4" aria-hidden />
             Importar respaldo
@@ -170,7 +173,7 @@ export default function ConfiguracionPage() {
         <button
           type="button"
           onClick={handleClearData}
-          className="mt-4 inline-flex items-center gap-2 rounded-xl bg-nutridex-danger px-4 py-2.5 text-sm font-medium text-white transition-colors hover:opacity-90 focus-visible:outline-2 focus-visible:outline-nutridex-danger focus-visible:outline-offset-2"
+          className="mt-4 inline-flex items-center gap-2 rounded-full bg-nutridex-danger px-4 py-2.5 text-sm font-medium text-white transition-colors hover:opacity-90 focus-visible:outline-2 focus-visible:outline-nutridex-danger focus-visible:outline-offset-2"
         >
           <Trash2 className="h-4 w-4" aria-hidden />
           Borrar todos mis datos

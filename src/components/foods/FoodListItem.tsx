@@ -15,7 +15,14 @@ export function FoodListItem({ food, isFavorite, onToggleFavorite }: FoodListIte
   const gramsLabel = formatGrams(food.grams);
 
   return (
-    <div className="flex items-center gap-3 border-b border-nutridex-border px-4 py-3 last:border-b-0 transition-colors hover:bg-nutridex-surface-muted/50">
+    <div className="flex items-center gap-3 border-b border-nutridex-border px-4 py-3 last:border-b-0 transition-colors hover:bg-nutridex-surface-muted/60">
+      <span
+        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-xs font-bold"
+        style={{ backgroundColor: `${group?.colorToken ?? "#2e7d32"}1f`, color: group?.colorToken ?? "#2e7d32" }}
+        aria-hidden
+      >
+        {food.name.charAt(0)}
+      </span>
       <div className="flex-1 min-w-0">
         <Link
           href={`/alimentos/${food.slug}`}

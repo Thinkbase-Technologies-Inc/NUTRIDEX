@@ -14,20 +14,23 @@ export function FoodGroupCard({ group, icon: Icon }: FoodGroupCardProps) {
   return (
     <Link
       href={`/categorias/${group.slug}`}
-      className="group flex flex-col rounded-xl border border-nutridex-border bg-nutridex-surface p-4 transition-all duration-150 hover:shadow-sm hover:border-nutridex-primary/30 focus-visible:outline-2 focus-visible:outline-nutridex-primary focus-visible:outline-offset-2"
+      className="group relative flex items-center gap-3.5 overflow-hidden rounded-2xl border border-nutridex-border bg-nutridex-surface p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_22px_40px_-28px_rgba(24,62,26,0.55)] focus-visible:outline-2 focus-visible:outline-nutridex-primary focus-visible:outline-offset-2"
     >
-      <div
-        className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg"
-        style={{ backgroundColor: `${group.colorToken}18` }}
+      <span
+        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl"
+        style={{ backgroundColor: `${group.colorToken}1f` }}
       >
         <Icon className="h-5 w-5" style={{ color: group.colorToken }} aria-hidden />
-      </div>
-      <span className="text-sm font-semibold text-nutridex-text-primary leading-snug">
-        {group.name}
       </span>
-      <span className="mt-1 text-xs text-nutridex-text-secondary">
-        {count} alimento{count !== 1 ? "s" : ""}
+      <span className="min-w-0 flex-1">
+        <span className="block truncate text-sm font-semibold leading-snug text-nutridex-text-primary">
+          {group.name}
+        </span>
+        <span className="mt-0.5 block text-xs text-nutridex-text-secondary">
+          {count} alimento{count !== 1 ? "s" : ""}
+        </span>
       </span>
+      <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ backgroundColor: group.colorToken }} aria-hidden />
     </Link>
   );
 }

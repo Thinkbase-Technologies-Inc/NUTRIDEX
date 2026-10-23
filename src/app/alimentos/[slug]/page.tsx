@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
-import { getFood, getGroups } from "@/data/foods";
+import { getFood, getGroup, getGroups } from "@/data/foods";
 import { FoodDetailClient } from "@/components/foods/FoodDetailClient";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -12,15 +13,23 @@ export function generateStaticParams() {
 
 export default async function FoodDetailPage({ params }: Props) {
   const { slug } = await params;
-  // Try to find by slug or id
-  const groups = getGroups();
-  let food = getFood(slug);
-  if (!food) {
-    // Try matching by slug pattern
-    const { getFoods } = await import("@/data/foods");
-    food = getFoods().find((f) => f.slug === slug);
-  }
+  const food = getFood(slug);
   if (!food) notFound();
 
-  return <FoodDetailClient foodId={food.id} />;
+  const groups = getGroups();
+  const group = food.groupId ? getGroup(food.groupId) : undefined;
+
+  return (
+    <div className="mx-auto w-full max-w-4xl px-5 py-8 md:px-10 md:py-12">
+      <Breadcrumb
+        items={[
+          { label: "Inicio", href: "/" },
+          { label: "Alimentos", href: "/alimentos" },
+          ...(group ? [{ label: group.name, href: `/categorias/${group.slug}` }] : []),
+          { label: food.name, href: `/alimentos/${food.slug}` },
+        ]}
+      />
+      <FoodDetailClient foodId={food.id} />
+    </div>
+  );
 }

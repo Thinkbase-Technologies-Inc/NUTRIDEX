@@ -1,44 +1,60 @@
 @import "tailwindcss";
 @import "@heroui/styles";
 
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 :root {
-  /* Brand / semantic tokens */
-  --nutridex-primary: #147d64;
-  --nutridex-primary-hover: #10664f;
-  --nutridex-primary-soft: #e8f5ef;
+  /* Brand / semantic tokens — airy, fresh HealthTech palette */
+  --nutridex-primary: #2e7d32;
+  --nutridex-primary-hover: #256628;
+  --nutridex-primary-soft: #e6f3e4;
+  --nutridex-accent: #4caf50;
 
-  --nutridex-background: #f8faf8;
+  --nutridex-background: #edf4e9;
   --nutridex-surface: #ffffff;
-  --nutridex-surface-muted: #f1f5f2;
+  --nutridex-surface-muted: #f3f7f0;
 
-  --nutridex-text-primary: #172922;
-  --nutridex-text-secondary: #67766e;
+  --nutridex-text-primary: #1b2a1c;
+  --nutridex-text-secondary: #6d7c6f;
 
-  --nutridex-border: #e3ebe5;
+  --nutridex-border: #e0eadd;
 
-  --nutridex-success: #168765;
-  --nutridex-warning: #cc8a31;
+  --nutridex-success: #2e7d32;
+  --nutridex-warning: #c9822b;
   --nutridex-danger: #cd5555;
+
+  --nutridex-ink: #141c15;
+  --nutridex-chip: #f6f8f4;
 }
 
 [data-theme="dark"] {
-  /* Dark palette - authentic, not simple inversion */
-  --nutridex-background: #0f1410;
-  --nutridex-surface: #161d19;
-  --nutridex-surface-muted: #1c2521;
-  --nutridex-text-primary: #e8f0ea;
-  --nutridex-text-secondary: #a9b8ad;
-  --nutridex-border: #2d3731;
-  --nutridex-primary-soft: #0e2a20;
-  --nutridex-success: #2fb08f;
-  --nutridex-warning: #e6a14a;
-  --nutridex-danger: #e67c7c;
+  --nutridex-primary: #6fce74;
+  --nutridex-primary-hover: #86dc8a;
+  --nutridex-primary-soft: #1e3320;
+  --nutridex-accent: #4caf50;
+
+  --nutridex-background: #101712;
+  --nutridex-surface: #18201a;
+  --nutridex-surface-muted: #1f2921;
+
+  --nutridex-text-primary: #eaf2ea;
+  --nutridex-text-secondary: #a4b3a6;
+
+  --nutridex-border: #2b382d;
+
+  --nutridex-success: #6fce74;
+  --nutridex-warning: #e0a75a;
+  --nutridex-danger: #e78989;
+
+  --nutridex-ink: #eaf2ea;
+  --nutridex-chip: #1f2921;
 }
 
 @theme inline {
   --color-nutridex-primary: var(--nutridex-primary);
   --color-nutridex-primary-hover: var(--nutridex-primary-hover);
   --color-nutridex-primary-soft: var(--nutridex-primary-soft);
+  --color-nutridex-accent: var(--nutridex-accent);
   --color-nutridex-background: var(--nutridex-background);
   --color-nutridex-surface: var(--nutridex-surface);
   --color-nutridex-surface-muted: var(--nutridex-surface-muted);
@@ -48,6 +64,8 @@
   --color-nutridex-success: var(--nutridex-success);
   --color-nutridex-warning: var(--nutridex-warning);
   --color-nutridex-danger: var(--nutridex-danger);
+  --color-nutridex-ink: var(--nutridex-ink);
+  --color-nutridex-chip: var(--nutridex-chip);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -70,6 +88,58 @@ body {
   box-sizing: border-box;
 }
 
+::selection {
+  background: var(--nutridex-primary-soft);
+  color: var(--nutridex-primary);
+}
+
+/* Soft ambient background — mirrors the airy reference layouts */
+.nx-ambient {
+  position: fixed;
+  inset: 0;
+  z-index: -10;
+  overflow: hidden;
+  pointer-events: none;
+}
+.nx-ambient::before,
+.nx-ambient::after {
+  content: "";
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(70px);
+  opacity: 0.55;
+}
+.nx-ambient::before {
+  width: 460px;
+  height: 460px;
+  top: -160px;
+  right: -120px;
+  background: radial-gradient(circle, #cdecc8 0%, rgba(205, 236, 200, 0) 70%);
+}
+.nx-ambient::after {
+  width: 520px;
+  height: 520px;
+  bottom: -220px;
+  left: -160px;
+  background: radial-gradient(circle, #d8efd0 0%, rgba(216, 239, 208, 0) 70%);
+}
+[data-theme="dark"] .nx-ambient::before,
+[data-theme="dark"] .nx-ambient::after {
+  opacity: 0.18;
+}
+
+.nx-card {
+  background: var(--nutridex-surface);
+  border: 1px solid var(--nutridex-border);
+  border-radius: 1.5rem;
+  box-shadow: 0 24px 48px -36px rgba(24, 62, 26, 0.45);
+}
+
+.nx-num {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -82,8 +152,6 @@ body {
   border-width: 0;
 }
 
-.reduce-motion *,
-* [data-reduced-motion],
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

@@ -8,6 +8,7 @@ import { getFood, getGroup, getFoods } from "@/data/foods";
 import { calculateEquivalents, formatGrams, searchMatch } from "@/domain/calculation";
 import type { MealPlan, Meal, MealFood } from "@/types";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { useToast } from "@/components/ui/Toast";
 
 const MEAL_NAMES = ["Desayuno", "Colación de media mañana", "Comida", "Colación de la tarde", "Cena"];
 
@@ -24,10 +25,11 @@ function AddFoodDialog({ onAdd, onClose }: { onAdd: (foodId: string, eq: number)
   const [query, setQuery] = useState("");
   const foods = getFoods();
   const matches = query.trim() ? foods.filter((f) => searchMatch(f, query)).slice(0, 10) : [];
+  const { showToast } = useToast();
 
   return (
     <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-black/40" role="dialog" aria-modal="true" aria-label="Agregar alimento">
-      <div className="w-full max-w-md rounded-t-2xl md:rounded-2xl bg-nutridex-surface p-6">
+      <div className="w-full max-w-md rounded-t-3xl md:rounded-3xl bg-nutridex-surface p-6">
         <h3 className="text-lg font-semibold text-nutridex-text-primary">Agregar alimento</h3>
         <input
           type="search"
@@ -35,19 +37,29 @@ function AddFoodDialog({ onAdd, onClose }: { onAdd: (foodId: string, eq: number)
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Buscar alimento..."
           autoFocus
-          className="mt-3 w-full rounded-lg border border-nutridex-border bg-nutridex-surface px-3 py-2 text-sm focus:outline-2 focus:outline-nutridex-primary"
+          className="mt-3 w-full rounded-full border border-nutridex-border bg-nutridex-surface px-4 py-2.5 text-sm focus:outline-2 focus:outline-nutridex-primary"
         />
-        <div className="mt-3 max-h-64 overflow-y-auto divide-y rounded-lg border border-nutridex-border">
+        <div className="mt-3 max-h-64 overflow-y-auto divide-y rounded-2xl border border-nutridex-border">
           {matches.length === 0 ? (
             <p className="px-3 py-2 text-sm text-nutridex-text-secondary">Sin resultados.</p>
           ) : (
             matches.map((f) => (
-              <button
-                key={f.id}
-                type="button"
-                onClick={() => { onAdd(f.id, 1); onClose(); }}
-                className="flex w-full items-center justify-between px-3 py-2.5 text-left transition-colors hover:bg-nutridex-surface-muted focus-visible:outline-2 focus-visible:outline-nutridex-primary"
-              >
+                <button
+                  key={f.id}
+                  type="button"
+                  onClick={() => {
+                    const fItem = getFood(f.id);
+                    onAdd(f.id, 1);
+                    onClose();
+                    showToast({
+                      type: "success",
+                      title: "Agregado al plan",
+                      description: fItem?.name ?? f.name,
+                      duration: 3000,
+                    });
+                  }}
+                  className="flex w-full items-center justify-between px-3 py-2.5 text-left transition-colors hover:bg-nutridex-surface-muted focus-visible:outline-2 focus-visible:outline-nutridex-primary"
+                >
                 <span className="text-sm font-medium text-nutridex-text-primary">{f.name}</span>
                 <span className="text-xs text-nutridex-text-secondary">{f.portionLabel}</span>
               </button>
@@ -57,7 +69,7 @@ function AddFoodDialog({ onAdd, onClose }: { onAdd: (foodId: string, eq: number)
         <button
           type="button"
           onClick={onClose}
-          className="mt-4 w-full rounded-lg border border-nutridex-border px-4 py-2 text-sm font-medium text-nutridex-text-primary hover:bg-nutridex-surface-muted focus-visible:outline-2 focus-visible:outline-nutridex-primary"
+          className="mt-4 w-full rounded-full border border-nutridex-border px-4 py-2.5 text-sm font-medium text-nutridex-text-primary hover:bg-nutridex-surface-muted focus-visible:outline-2 focus-visible:outline-nutridex-primary"
         >
           Cancelar
         </button>
@@ -72,7 +84,7 @@ function MealCard({ meal, date, onDuplicate }: { meal: Meal; date: string; onDup
   const { addFood } = usePlannerStore();
 
   return (
-    <div className="rounded-xl border border-nutridex-border bg-nutridex-surface p-4">
+    <div className="rounded-2xl border border-nutridex-border bg-nutridex-surface p-4 shadow-[0_18px_40px_-36px_rgba(24,62,26,0.4)]">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold text-nutridex-text-primary">{meal.name}</h3>
         <div className="flex items-center gap-1">
@@ -104,7 +116,7 @@ function MealCard({ meal, date, onDuplicate }: { meal: Meal; date: string; onDup
             if (!food) return null;
             const result = calculateEquivalents(food, mf.equivalents);
             return (
-              <li key={mf.id} className="flex items-center justify-between gap-2 rounded-lg bg-nutridex-surface-muted px-3 py-2">
+              <li key={mf.id} className="flex items-center justify-between gap-2 rounded-xl bg-nutridex-surface-muted px-3 py-2">
                 <div className="min-w-0">
                   <p className="text-sm font-medium text-nutridex-text-primary truncate">{food.name}</p>
                   <p className="text-xs text-nutridex-text-secondary">
@@ -177,7 +189,7 @@ function EquivalentSummary({ plan }: { plan: MealPlan }) {
   if (entries.length === 0) return null;
 
   return (
-    <div className="mt-6 rounded-xl border border-nutridex-border bg-nutridex-surface p-4">
+    <div className="mt-6 rounded-2xl border border-nutridex-border bg-nutridex-surface p-5">
       <h3 className="text-sm font-semibold text-nutridex-text-primary">Resumen de equivalentes</h3>
       <ul className="mt-3 space-y-1.5">
         {entries.map(([groupId, total]) => {
@@ -230,24 +242,27 @@ export default function MiPlanPage() {
   }, [plan, activeDate, ensurePlan]);
 
   return (
-    <div className="mx-auto w-full max-w-3xl px-4 py-8 md:px-8 md:py-12">
-      <header className="flex items-center justify-between">
+    <div className="mx-auto w-full max-w-3xl px-5 py-8 md:px-10 md:py-12">
+      <header className="flex items-end justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-nutridex-text-primary">Mi plan alimenticio</h1>
-          <p className="mt-1 text-sm text-nutridex-text-secondary">Organiza tus comidas del día</p>
+          <p className="text-sm font-medium text-nutridex-primary">Tu día, organizado</p>
+          <h1 className="mt-2 text-[30px] font-bold tracking-tight text-nutridex-text-primary md:text-4xl">
+            Mi plan alimenticio
+          </h1>
+          <p className="mt-2 text-sm text-nutridex-text-secondary">Organiza tus comidas del día</p>
         </div>
         <button
           type="button"
           onClick={handlePrint}
-          className="inline-flex items-center gap-1.5 rounded-lg border border-nutridex-border bg-nutridex-surface px-3 py-2 text-sm text-nutridex-text-secondary hover:bg-nutridex-surface-muted focus-visible:outline-2 focus-visible:outline-nutridex-primary"
+          className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-nutridex-border bg-nutridex-surface px-3.5 py-2 text-sm text-nutridex-text-secondary hover:bg-nutridex-surface-muted focus-visible:outline-2 focus-visible:outline-nutridex-primary"
         >
           <Printer className="h-4 w-4" aria-hidden />
-          Imprimir
+          <span className="hidden sm:inline">Imprimir</span>
         </button>
       </header>
 
       {/* Navegación de fecha */}
-      <div className="mt-6 flex items-center justify-between rounded-xl border border-nutridex-border bg-nutridex-surface p-3">
+      <div className="mt-6 flex items-center justify-between rounded-2xl border border-nutridex-border bg-nutridex-surface p-2.5 shadow-[0_18px_40px_-36px_rgba(24,62,26,0.4)]">
         <button
           type="button"
           onClick={() => handleDateChange(-1)}
@@ -274,14 +289,14 @@ export default function MiPlanPage() {
         <button
           type="button"
           onClick={handleDuplicateDay}
-          className="inline-flex items-center gap-1.5 rounded-lg border border-nutridex-border bg-nutridex-surface px-3 py-2 text-sm text-nutridex-text-secondary hover:bg-nutridex-surface-muted focus-visible:outline-2 focus-visible:outline-nutridex-primary"
+          className="inline-flex items-center gap-1.5 rounded-full border border-nutridex-border bg-nutridex-surface px-3.5 py-2 text-sm text-nutridex-text-secondary hover:bg-nutridex-surface-muted focus-visible:outline-2 focus-visible:outline-nutridex-primary"
         >
           <Copy className="h-4 w-4" aria-hidden />
           Duplicar día
         </button>
         <Link
           href="/mi-plan/semana"
-          className="inline-flex items-center gap-1.5 rounded-lg border border-nutridex-border bg-nutridex-surface px-3 py-2 text-sm text-nutridex-text-secondary hover:bg-nutridex-surface-muted focus-visible:outline-2 focus-visible:outline-nutridex-primary"
+          className="inline-flex items-center gap-1.5 rounded-full border border-nutridex-border bg-nutridex-surface px-3.5 py-2 text-sm text-nutridex-text-secondary hover:bg-nutridex-surface-muted focus-visible:outline-2 focus-visible:outline-nutridex-primary"
         >
           <CalendarDays className="h-4 w-4" aria-hidden />
           Vista semanal

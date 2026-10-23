@@ -44,7 +44,7 @@ export default function SemanaPage() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-4 py-8 md:px-8 md:py-12">
+    <div className="mx-auto w-full max-w-5xl px-5 py-8 md:px-10 md:py-12">
       <header>
         <Link
           href="/mi-plan"
@@ -53,10 +53,13 @@ export default function SemanaPage() {
           <ChevronLeft className="h-4 w-4" aria-hidden />
           Volver al plan diario
         </Link>
-        <h1 className="mt-4 text-2xl font-bold text-nutridex-text-primary">Vista semanal</h1>
+        <h1 className="mt-4 text-[30px] font-bold tracking-tight text-nutridex-text-primary md:text-4xl">
+          Vista semanal
+        </h1>
+        <p className="mt-2 text-sm text-nutridex-text-secondary">Revisa y duplica tus planes día por día.</p>
       </header>
 
-      <div className="mt-6 flex items-center justify-between rounded-xl border border-nutridex-border bg-nutridex-surface p-3">
+      <div className="mt-6 flex items-center justify-between rounded-2xl border border-nutridex-border bg-nutridex-surface p-2.5">
         <button
           type="button"
           onClick={() => changeWeek(-1)}
@@ -87,7 +90,7 @@ export default function SemanaPage() {
           const dayNum = d.getDate();
 
           return (
-            <div key={date} className="rounded-xl border border-nutridex-border bg-nutridex-surface p-4">
+            <div key={date} className="rounded-2xl border border-nutridex-border bg-nutridex-surface p-4 shadow-[0_18px_40px_-38px_rgba(24,62,26,0.4)]">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs text-nutridex-text-secondary capitalize">{dayName}</p>

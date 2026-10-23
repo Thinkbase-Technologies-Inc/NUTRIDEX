@@ -23,10 +23,11 @@ export default function FavoritosPage() {
   }, [foods, favorites, query]);
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-4 py-8 md:px-8 md:py-12">
+    <div className="mx-auto w-full max-w-5xl px-5 py-8 md:px-10 md:py-12">
       <header>
-        <h1 className="text-2xl font-bold text-nutridex-text-primary">Favoritos</h1>
-        <p className="mt-1 text-sm text-nutridex-text-secondary">
+        <p className="text-sm font-medium text-nutridex-primary">Tu selección personal</p>
+        <h1 className="mt-2 text-[30px] font-bold tracking-tight text-nutridex-text-primary md:text-4xl">Favoritos</h1>
+        <p className="mt-2 text-sm text-nutridex-text-secondary">
           Alimentos que has guardado para consulta rápida
         </p>
       </header>

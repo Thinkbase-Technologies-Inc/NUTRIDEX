@@ -8,8 +8,8 @@ export const metadata = {
 
 export default function AcercaDePage() {
   return (
-    <div className="mx-auto w-full max-w-2xl px-4 py-8 md:px-8 md:py-12">
-      <div className="rounded-2xl border border-nutridex-border bg-nutridex-surface p-6 sm:p-8">
+    <div className="mx-auto w-full max-w-2xl px-5 py-8 md:px-10 md:py-12">
+      <div className="rounded-3xl border border-nutridex-border bg-nutridex-surface p-6 shadow-[0_24px_50px_-40px_rgba(24,62,26,0.5)] sm:p-8">
         <div className="flex flex-wrap items-center justify-between gap-5">
           <div className="flex items-center gap-3">
             <NutriDexLogo size={44} />

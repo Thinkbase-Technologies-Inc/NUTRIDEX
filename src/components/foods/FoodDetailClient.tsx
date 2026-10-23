@@ -59,9 +59,12 @@ export function FoodDetailClient({ foodId }: FoodDetailClientProps) {
       </header>
 
       {/* Porción de referencia - dato más importante */}
-      <section className="mt-8 rounded-2xl border border-nutridex-border bg-nutridex-surface p-8 text-center">
-        <p className="text-sm text-nutridex-text-secondary">Porción de referencia</p>
-        <p className="mt-2 text-4xl font-bold text-nutridex-primary">{food.portionLabel}</p>
+      <section className="nx-card relative mt-8 overflow-hidden p-8 text-center">
+        <div className="pointer-events-none absolute -right-10 -top-10 h-36 w-36 rounded-full bg-nutridex-primary-soft blur-2xl" aria-hidden />
+        <p className="text-sm text-nutridex-text-secondary">Porción de referencia · 1 equivalente</p>
+        <p className="nx-num mt-2 text-4xl font-bold tracking-tight text-nutridex-primary md:text-5xl">
+          {food.portionLabel}
+        </p>
         {food.grams !== null && (
           <p className="mt-2 text-xl font-medium text-nutridex-text-primary">
             {food.isApproximate && "≈ "}
@@ -81,16 +84,16 @@ export function FoodDetailClient({ foodId }: FoodDetailClientProps) {
         </div>
 
         <div
-          className="mt-6 rounded-xl border border-nutridex-border bg-nutridex-primary-soft p-6 text-center"
+          className="mt-6 rounded-2xl bg-gradient-to-br from-[#2e7d32] to-[#4caf50] p-6 text-center text-white shadow-[0_28px_50px_-30px_rgba(46,125,50,0.8)]"
           role="status"
           aria-live="polite"
         >
-          <p className="text-sm text-nutridex-text-secondary">
+          <p className="text-sm text-white/80">
             {equivalents} equivalente{equivalents !== 1 ? "s" : ""}
           </p>
-          <p className="mt-1 text-2xl font-bold text-nutridex-primary">{result.quantityLabel}</p>
+          <p className="nx-num mt-1 text-3xl font-bold">{result.quantityLabel}</p>
           {result.grams !== null && (
-            <p className="mt-1 text-lg font-medium text-nutridex-text-primary">
+            <p className="mt-1 text-lg font-medium text-white/90">
               {result.isApproximate && "≈ "}
               {formatGrams(result.grams)}
             </p>

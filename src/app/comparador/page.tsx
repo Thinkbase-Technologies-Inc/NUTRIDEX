@@ -21,7 +21,7 @@ function FoodPicker({ selectedId, onSelect, excludeId }: { selectedId: string | 
         onClick={() => setOpen(!open)}
         aria-expanded={open}
         aria-haspopup="listbox"
-        className="flex w-full items-center justify-between rounded-xl border border-nutridex-border bg-nutridex-surface px-4 py-3 text-left transition-colors hover:bg-nutridex-surface-muted focus-visible:outline-2 focus-visible:outline-nutridex-primary"
+        className="flex w-full items-center justify-between rounded-full border border-nutridex-border bg-nutridex-surface px-4 py-3 text-left transition-colors hover:bg-nutridex-surface-muted focus-visible:outline-2 focus-visible:outline-nutridex-primary"
       >
         <span className={selected ? "text-sm font-medium text-nutridex-text-primary" : "text-sm text-nutridex-text-secondary"}>
           {selected ? selected.name : "Seleccionar alimento"}
@@ -29,7 +29,7 @@ function FoodPicker({ selectedId, onSelect, excludeId }: { selectedId: string | 
         <ChevronDown className="h-4 w-4 text-nutridex-text-secondary" aria-hidden />
       </button>
       {open && (
-        <div className="absolute z-50 mt-1 w-full rounded-xl border border-nutridex-border bg-nutridex-surface shadow-lg">
+        <div className="absolute z-50 mt-1 w-full overflow-hidden rounded-2xl border border-nutridex-border bg-nutridex-surface shadow-[0_30px_60px_-30px_rgba(24,62,26,0.45)]">
           <div className="p-2">
             <div className="relative">
               <Search className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-nutridex-text-secondary" aria-hidden />
@@ -39,7 +39,7 @@ function FoodPicker({ selectedId, onSelect, excludeId }: { selectedId: string | 
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Buscar..."
                 autoFocus
-                className="w-full rounded-lg border border-nutridex-border bg-nutridex-surface py-2 pl-8 pr-2 text-sm focus:outline-2 focus:outline-nutridex-primary"
+                className="w-full rounded-full border border-nutridex-border bg-nutridex-surface py-2 pl-8 pr-3 text-sm focus:outline-2 focus:outline-nutridex-primary"
               />
             </div>
           </div>
@@ -117,10 +117,13 @@ function ComparatorInner() {
   const groupBOptions = foodA ? getFoodsByGroup(foodA.groupId).filter((f) => f.id !== foodA.id) : [];
 
   return (
-    <div className="mx-auto w-full max-w-4xl px-4 py-8 md:px-8 md:py-12">
+    <div className="mx-auto w-full max-w-4xl px-5 py-8 md:px-10 md:py-12">
       <header>
-        <h1 className="text-2xl font-bold text-nutridex-text-primary">Comparador de alimentos</h1>
-        <p className="mt-1 text-sm text-nutridex-text-secondary">
+        <p className="text-sm font-medium text-nutridex-primary">Intercambios inteligentes</p>
+        <h1 className="mt-2 text-[30px] font-bold tracking-tight text-nutridex-text-primary md:text-4xl">
+          Comparador de alimentos
+        </h1>
+        <p className="mt-2 max-w-lg text-sm leading-relaxed text-nutridex-text-secondary">
           Compara porciones de alimentos del mismo grupo al mismo número de equivalentes.
         </p>
       </header>
@@ -133,18 +136,18 @@ function ComparatorInner() {
       {/* Tarjetas de comparación */}
       <section className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2">
         {/* Alimento A */}
-        <div className="rounded-2xl border border-nutridex-border bg-nutridex-surface p-6">
+        <div className="nx-card p-6">
           <h2 className="text-sm font-semibold text-nutridex-text-secondary mb-3">Alimento A</h2>
           <FoodPicker selectedId={foodAId} onSelect={handleSelectA} />
           {foodA && resultA && (
             <div className="mt-4">
               <p className="text-xs text-nutridex-text-secondary">{getGroup(foodA.groupId)?.name}</p>
               <p className="mt-2 text-lg font-semibold text-nutridex-text-primary">{foodA.name}</p>
-              <div className="mt-3 rounded-lg bg-nutridex-surface-muted p-4 text-center">
-                <p className="text-sm text-nutridex-text-secondary">{equivalents} equivalente{equivalents !== 1 ? "s" : ""}</p>
-                <p className="mt-1 text-xl font-bold text-nutridex-primary">{resultA.quantityLabel}</p>
+              <div className="mt-3 rounded-2xl bg-gradient-to-br from-[#2e7d32] to-[#4caf50] p-4 text-center text-white">
+                <p className="text-xs text-white/80">{equivalents} equivalente{equivalents !== 1 ? "s" : ""}</p>
+                <p className="nx-num mt-1 text-2xl font-bold">{resultA.quantityLabel}</p>
                 {resultA.grams !== null && (
-                  <p className="mt-1 text-sm text-nutridex-text-primary">
+                  <p className="mt-1 text-sm text-white/90">
                     {resultA.isApproximate && "≈ "}{formatGrams(resultA.grams)}
                   </p>
                 )}
@@ -154,7 +157,7 @@ function ComparatorInner() {
         </div>
 
         {/* Alimento B */}
-        <div className="rounded-2xl border border-nutridex-border bg-nutridex-surface p-6">
+        <div className="nx-card p-6">
           <h2 className="text-sm font-semibold text-nutridex-text-secondary mb-3">Alimento B</h2>
           {foodA ? (
             <>
@@ -166,11 +169,11 @@ function ComparatorInner() {
                 <div className="mt-4">
                   <p className="text-xs text-nutridex-text-secondary">{getGroup(foodB.groupId)?.name}</p>
                   <p className="mt-2 text-lg font-semibold text-nutridex-text-primary">{foodB.name}</p>
-                  <div className="mt-3 rounded-lg bg-nutridex-surface-muted p-4 text-center">
-                    <p className="text-sm text-nutridex-text-secondary">{equivalents} equivalente{equivalents !== 1 ? "s" : ""}</p>
-                    <p className="mt-1 text-xl font-bold text-nutridex-primary">{resultB.quantityLabel}</p>
+                  <div className="mt-3 rounded-2xl bg-gradient-to-br from-[#2e7d32] to-[#4caf50] p-4 text-center text-white">
+                    <p className="text-xs text-white/80">{equivalents} equivalente{equivalents !== 1 ? "s" : ""}</p>
+                    <p className="nx-num mt-1 text-2xl font-bold">{resultB.quantityLabel}</p>
                     {resultB.grams !== null && (
-                      <p className="mt-1 text-sm text-nutridex-text-primary">
+                      <p className="mt-1 text-sm text-white/90">
                         {resultB.isApproximate && "≈ "}{formatGrams(resultB.grams)}
                       </p>
                     )}
@@ -207,7 +210,7 @@ function ComparatorInner() {
           <button
             type="button"
             onClick={handleSwap}
-            className="inline-flex items-center gap-2 rounded-xl border border-nutridex-border bg-nutridex-surface px-5 py-2.5 text-sm font-medium text-nutridex-text-primary transition-colors hover:bg-nutridex-surface-muted focus-visible:outline-2 focus-visible:outline-nutridex-primary focus-visible:outline-offset-2"
+            className="inline-flex items-center gap-2 rounded-full border border-nutridex-border bg-nutridex-surface px-5 py-2.5 text-sm font-medium text-nutridex-text-primary transition-colors hover:bg-nutridex-surface-muted focus-visible:outline-2 focus-visible:outline-nutridex-primary focus-visible:outline-offset-2"
           >
             <ArrowLeftRight className="h-4 w-4" aria-hidden />
             Intercambiar alimentos

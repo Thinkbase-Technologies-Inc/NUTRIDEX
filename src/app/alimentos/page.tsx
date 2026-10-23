@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { LayoutGrid, List, Heart } from "lucide-react";
+import { LayoutGrid, List } from "lucide-react";
 import { getFoods, getGroups } from "@/data/foods";
 import { searchMatch } from "@/domain/calculation";
 import { FoodCard } from "@/components/foods/FoodCard";
@@ -30,24 +30,25 @@ export default function AlimentosPage() {
   const hasFilters = !!groupFilter || !!query.trim();
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-4 py-8 md:px-8 md:py-12">
+    <div className="mx-auto w-full max-w-5xl px-5 py-8 md:px-10 md:py-12">
       <header>
-        <h1 className="text-2xl font-bold text-nutridex-text-primary">Alimentos</h1>
-        <p className="mt-1 text-sm text-nutridex-text-secondary">
-          Explora el catálogo de alimentos equivalentes
+        <p className="text-sm font-medium text-nutridex-primary">Catálogo de equivalentes</p>
+        <h1 className="mt-2 text-[30px] font-bold tracking-tight text-nutridex-text-primary md:text-4xl">Alimentos</h1>
+        <p className="mt-2 max-w-lg text-sm leading-relaxed text-nutridex-text-secondary">
+          Explora el catálogo de alimentos equivalentes y calcula la porción que necesitas.
         </p>
       </header>
 
-      <div className="mt-6 flex flex-col gap-4">
-        <div className="flex items-center gap-3">
+      <div className="mt-7 flex flex-col gap-4">
+        <div className="flex items-center gap-2">
           <FoodSearch value={query} onChange={setQuery} className="flex-1" />
-          <div className="flex rounded-lg border border-nutridex-border overflow-hidden">
+          <div className="flex shrink-0 rounded-full border border-nutridex-border bg-nutridex-surface p-1">
             <button
               type="button"
               onClick={() => setView("grid")}
               aria-label="Vista de tarjetas"
               aria-pressed={view === "grid"}
-              className={`px-3 py-2 transition-colors focus-visible:outline-2 focus-visible:outline-nutridex-primary ${view === "grid" ? "bg-nutridex-primary-soft text-nutridex-primary" : "text-nutridex-text-secondary hover:bg-nutridex-surface-muted"}`}
+              className={`rounded-full p-2 transition-colors focus-visible:outline-2 focus-visible:outline-nutridex-primary ${view === "grid" ? "bg-nutridex-primary text-white" : "text-nutridex-text-secondary hover:bg-nutridex-surface-muted"}`}
             >
               <LayoutGrid className="h-4 w-4" aria-hidden />
             </button>
@@ -56,19 +57,19 @@ export default function AlimentosPage() {
               onClick={() => setView("list")}
               aria-label="Vista de listado compacto"
               aria-pressed={view === "list"}
-              className={`px-3 py-2 transition-colors focus-visible:outline-2 focus-visible:outline-nutridex-primary ${view === "list" ? "bg-nutridex-primary-soft text-nutridex-primary" : "text-nutridex-text-secondary hover:bg-nutridex-surface-muted"}`}
+              className={`rounded-full p-2 transition-colors focus-visible:outline-2 focus-visible:outline-nutridex-primary ${view === "list" ? "bg-nutridex-primary text-white" : "text-nutridex-text-secondary hover:bg-nutridex-surface-muted"}`}
             >
               <List className="h-4 w-4" aria-hidden />
             </button>
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-2">
+        <div className="-mx-5 flex flex-wrap gap-2 px-5 md:mx-0 md:px-0">
           <button
             type="button"
             onClick={() => setGroupFilter(null)}
             aria-pressed={!groupFilter}
-            className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors focus-visible:outline-2 focus-visible:outline-nutridex-primary ${!groupFilter ? "bg-nutridex-primary text-white" : "bg-nutridex-surface-muted text-nutridex-text-secondary hover:bg-nutridex-surface"}`}
+            className={`rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors focus-visible:outline-2 focus-visible:outline-nutridex-primary ${!groupFilter ? "bg-nutridex-primary text-white" : "border border-nutridex-border bg-nutridex-surface text-nutridex-text-secondary hover:bg-nutridex-surface-muted"}`}
           >
             Todos
           </button>
@@ -78,7 +79,7 @@ export default function AlimentosPage() {
               type="button"
               onClick={() => setGroupFilter(g.id)}
               aria-pressed={groupFilter === g.id}
-              className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors focus-visible:outline-2 focus-visible:outline-nutridex-primary ${groupFilter === g.id ? "bg-nutridex-primary text-white" : "bg-nutridex-surface-muted text-nutridex-text-secondary hover:bg-nutridex-surface"}`}
+              className={`rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors focus-visible:outline-2 focus-visible:outline-nutridex-primary ${groupFilter === g.id ? "bg-nutridex-primary text-white" : "border border-nutridex-border bg-nutridex-surface text-nutridex-text-secondary hover:bg-nutridex-surface-muted"}`}
             >
               {g.name}
             </button>
@@ -120,7 +121,7 @@ export default function AlimentosPage() {
             ))}
           </div>
         ) : (
-          <div className="overflow-hidden rounded-xl border border-nutridex-border bg-nutridex-surface">
+          <div className="overflow-hidden rounded-2xl border border-nutridex-border bg-nutridex-surface shadow-[0_18px_40px_-34px_rgba(24,62,26,0.45)]">
             {filtered.map((food) => (
               <FoodListItem
                 key={food.id}
