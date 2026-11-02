@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { LayoutGrid, List } from "lucide-react";
+import { useState, useMemo, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
+import { LayoutGrid, List, Package, Sparkles } from "lucide-react";
 import { getFoods, getGroups } from "@/data/foods";
 import { searchMatch } from "@/domain/calculation";
 import { FoodCard } from "@/components/foods/FoodCard";
@@ -9,10 +10,12 @@ import { FoodListItem } from "@/components/foods/FoodListItem";
 import { FoodSearch } from "@/components/ui/FoodSearch";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { useFoodsStore } from "@/stores/useFoodsStore";
-import { Package } from "lucide-react";
 
-export default function AlimentosPage() {
-  const [query, setQuery] = useState("");
+function AlimentosContent() {
+  const searchParams = useSearchParams();
+  const initialQuery = searchParams.get("q") ?? "";
+
+  const [query, setQuery] = useState(initialQuery);
   const [groupFilter, setGroupFilter] = useState<string | null>(null);
   const [view, setView] = useState<"grid" | "list">("grid");
   const { favorites, toggleFavorite } = useFoodsStore();
@@ -30,84 +33,138 @@ export default function AlimentosPage() {
   const hasFilters = !!groupFilter || !!query.trim();
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-5 py-8 md:px-10 md:py-12">
+    <div className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 md:px-8 md:py-10">
       <header>
-        <p className="text-sm font-medium text-nutridex-primary">Catálogo de equivalentes</p>
-        <h1 className="mt-2 text-[30px] font-bold tracking-tight text-nutridex-text-primary md:text-4xl">Alimentos</h1>
-        <p className="mt-2 max-w-lg text-sm leading-relaxed text-nutridex-text-secondary">
-          Explora el catálogo de alimentos equivalentes y calcula la porción que necesitas.
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-nutridex-text-primary">
+          Catálogo de alimentos
+        </h1>
+        <p className="mt-1.5 max-w-xl text-sm leading-relaxed text-nutridex-text-secondary">
+          Explora los alimentos equivalentes y consulta porciones de referencia, unidades caseras y gramajes.
         </p>
       </header>
 
-      <div className="mt-7 flex flex-col gap-4">
+      {/* Control bar */}
+      <div className="mt-6 flex flex-col gap-3.5">
         <div className="flex items-center gap-2">
           <FoodSearch value={query} onChange={setQuery} className="flex-1" />
-          <div className="flex shrink-0 rounded-full border border-nutridex-border bg-nutridex-surface p-1">
+          <div className="flex shrink-0 rounded-xl border border-nutridex-border bg-nutridex-surface p-1 shadow-xs">
             <button
               type="button"
               onClick={() => setView("grid")}
-              aria-label="Vista de tarjetas"
+              aria-label="Vista de cuadrícula"
               aria-pressed={view === "grid"}
-              className={`rounded-full p-2 transition-colors focus-visible:outline-2 focus-visible:outline-nutridex-primary ${view === "grid" ? "bg-nutridex-primary text-white" : "text-nutridex-text-secondary hover:bg-nutridex-surface-muted"}`}
+              className={`rounded-lg p-2 transition-colors focus-visible:outline-2 focus-visible:outline-nutridex-primary ${
+                view === "grid"
+                  ? "bg-nutridex-primary text-white"
+                  : "text-nutridex-text-secondary hover:bg-nutridex-surface-muted"
+              }`}
             >
               <LayoutGrid className="h-4 w-4" aria-hidden />
             </button>
             <button
               type="button"
               onClick={() => setView("list")}
-              aria-label="Vista de listado compacto"
+              aria-label="Vista de lista compacta"
               aria-pressed={view === "list"}
-              className={`rounded-full p-2 transition-colors focus-visible:outline-2 focus-visible:outline-nutridex-primary ${view === "list" ? "bg-nutridex-primary text-white" : "text-nutridex-text-secondary hover:bg-nutridex-surface-muted"}`}
+              className={`rounded-lg p-2 transition-colors focus-visible:outline-2 focus-visible:outline-nutridex-primary ${
+                view === "list"
+                  ? "bg-nutridex-primary text-white"
+                  : "text-nutridex-text-secondary hover:bg-nutridex-surface-muted"
+              }`}
             >
               <List className="h-4 w-4" aria-hidden />
             </button>
           </div>
         </div>
 
-        <div className="-mx-5 flex flex-wrap gap-2 px-5 md:mx-0 md:px-0">
+        {/* Category horizontal filter bar with snap & smooth touch */}
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1 -mx-4 px-4 sm:mx-0 sm:px-0">
           <button
             type="button"
             onClick={() => setGroupFilter(null)}
             aria-pressed={!groupFilter}
-            className={`rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors focus-visible:outline-2 focus-visible:outline-nutridex-primary ${!groupFilter ? "bg-nutridex-primary text-white" : "border border-nutridex-border bg-nutridex-surface text-nutridex-text-secondary hover:bg-nutridex-surface-muted"}`}
+            className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-semibold transition-all active:scale-95 focus-visible:outline-2 focus-visible:outline-nutridex-primary ${
+              !groupFilter
+                ? "bg-nutridex-primary text-white shadow-xs"
+                : "border border-nutridex-border bg-nutridex-surface text-nutridex-text-secondary hover:border-nutridex-primary/40 hover:text-nutridex-text-primary"
+            }`}
           >
-            Todos
+            Todos ({foods.length})
           </button>
-          {groups.map((g) => (
-            <button
-              key={g.id}
-              type="button"
-              onClick={() => setGroupFilter(g.id)}
-              aria-pressed={groupFilter === g.id}
-              className={`rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors focus-visible:outline-2 focus-visible:outline-nutridex-primary ${groupFilter === g.id ? "bg-nutridex-primary text-white" : "border border-nutridex-border bg-nutridex-surface text-nutridex-text-secondary hover:bg-nutridex-surface-muted"}`}
-            >
-              {g.name}
-            </button>
-          ))}
+          {groups.map((g) => {
+            const count = foods.filter((f) => f.groupId === g.id).length;
+            const active = groupFilter === g.id;
+            return (
+              <button
+                key={g.id}
+                type="button"
+                onClick={() => setGroupFilter(active ? null : g.id)}
+                aria-pressed={active}
+                className={`shrink-0 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition-all active:scale-95 focus-visible:outline-2 focus-visible:outline-nutridex-primary ${
+                  active
+                    ? "bg-nutridex-primary text-white shadow-xs"
+                    : "border border-nutridex-border bg-nutridex-surface text-nutridex-text-secondary hover:border-nutridex-primary/40 hover:text-nutridex-text-primary"
+                }`}
+              >
+                <span
+                  className="h-2 w-2 rounded-full shrink-0"
+                  style={{ backgroundColor: active ? "#ffffff" : g.colorToken }}
+                  aria-hidden
+                />
+                <span>{g.name}</span>
+                <span className={`text-xs ${active ? "text-white/80" : "text-nutridex-text-secondary/70"}`}>
+                  ({count})
+                </span>
+              </button>
+            );
+          })}
         </div>
 
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-nutridex-text-secondary" role="status" aria-live="polite">
-            {filtered.length} resultado{filtered.length !== 1 ? "s" : ""}
+        {/* Status line */}
+        <div className="flex items-center justify-between text-xs sm:text-sm">
+          <p className="font-medium text-nutridex-text-secondary" role="status" aria-live="polite">
+            Mostrando <span className="font-bold text-nutridex-text-primary">{filtered.length}</span> alimento
+            {filtered.length !== 1 ? "s" : ""}
+            {groupFilter && (
+              <span>
+                {" "}en <span className="font-semibold text-nutridex-primary">{groups.find((g) => g.id === groupFilter)?.name}</span>
+              </span>
+            )}
           </p>
           {hasFilters && (
             <button
               type="button"
-              onClick={() => { setQuery(""); setGroupFilter(null); }}
-              className="text-sm font-medium text-nutridex-primary hover:underline focus-visible:outline-2 focus-visible:outline-nutridex-primary focus-visible:outline-offset-2 rounded"
+              onClick={() => {
+                setQuery("");
+                setGroupFilter(null);
+              }}
+              className="font-semibold text-nutridex-primary hover:underline focus-visible:outline-2 focus-visible:outline-nutridex-primary rounded py-0.5"
             >
-              Limpiar filtros
+              Restablecer filtros
             </button>
           )}
         </div>
       </div>
 
-      <div className="mt-6">
+      {/* Content View */}
+      <div className="mt-5">
         {filtered.length === 0 ? (
           <EmptyState
             icon={Package}
-            title="Sin resultados"
-            description="No se encontraron alimentos que coincidan con tu búsqueda. Prueba con otro término o limpia los filtros."
+            title="Sin alimentos encontrados"
+            description="No encontramos resultados para tu búsqueda o filtro actual. Intenta con otro término o limpia los filtros."
+            action={
+              <button
+                type="button"
+                onClick={() => {
+                  setQuery("");
+                  setGroupFilter(null);
+                }}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-nutridex-primary px-4 py-2 text-xs font-semibold text-white hover:bg-nutridex-primary-hover transition-colors"
+              >
+                Ver todos los alimentos
+              </button>
+            }
           />
         ) : view === "grid" ? (
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -121,7 +178,7 @@ export default function AlimentosPage() {
             ))}
           </div>
         ) : (
-          <div className="overflow-hidden rounded-2xl border border-nutridex-border bg-nutridex-surface shadow-[0_18px_40px_-34px_rgba(24,62,26,0.45)]">
+          <div className="overflow-hidden rounded-2xl border border-nutridex-border bg-nutridex-surface shadow-xs divide-y divide-nutridex-border/60">
             {filtered.map((food) => (
               <FoodListItem
                 key={food.id}
@@ -134,5 +191,13 @@ export default function AlimentosPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function AlimentosPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center text-sm text-nutridex-text-secondary">Cargando catálogo…</div>}>
+      <AlimentosContent />
+    </Suspense>
   );
 }

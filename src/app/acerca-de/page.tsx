@@ -1,5 +1,5 @@
 import { Info } from "lucide-react";
-import { NutriDexLogo } from "@/components/ui/Logo";
+import { NutriDexIcon } from "@/components/ui/NutriDexIcon";
 import { ThinkBaseLogo } from "@/components/ui/ThinkBaseLogo";
 
 export const metadata = {
@@ -11,8 +11,8 @@ export default function AcercaDePage() {
     <div className="mx-auto w-full max-w-2xl px-5 py-8 md:px-10 md:py-12">
       <div className="rounded-3xl border border-nutridex-border bg-nutridex-surface p-6 shadow-[0_24px_50px_-40px_rgba(24,62,26,0.5)] sm:p-8">
         <div className="flex flex-wrap items-center justify-between gap-5">
-          <div className="flex items-center gap-3">
-            <NutriDexLogo size={44} />
+          <div className="flex items-center gap-3.5">
+            <NutriDexIcon size={48} glow />
             <div>
               <h1 className="text-2xl font-bold tracking-tight text-nutridex-text-primary">NutriDex</h1>
               <p className="text-sm text-nutridex-text-secondary">Equivalencias claras. Nutrición inteligente.</p>
@@ -27,8 +27,8 @@ export default function AcercaDePage() {
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-nutridex-text-secondary">Producto desarrollado con</p>
             <p className="mt-1 text-sm text-nutridex-text-primary">Tecnología y diseño digital de ThinkBase</p>
           </div>
-          <div className="rounded-xl border border-nutridex-border bg-nutridex-background px-4 py-3">
-            <ThinkBaseLogo markSize={32} />
+          <div className="rounded-2xl border border-nutridex-border bg-nutridex-surface-muted px-5 py-3 shadow-sm">
+            <ThinkBaseLogo markSize={32} variant="icon" showWordmark={true} glow />
           </div>
         </div>
       </div>

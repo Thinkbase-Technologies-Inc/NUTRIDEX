@@ -1,55 +1,82 @@
+"use client";
+
+import { useState } from "react";
+
 interface ThinkBaseLogoProps {
   markSize?: number;
   showWordmark?: boolean;
+  variant?: "icon" | "full";
   className?: string;
+  glow?: boolean;
 }
 
-/** ThinkBase signature mark, based on the supplied cyan–blue–violet artwork. */
+export const THINKBASE_LOGOS = {
+  // Official icon requested by user
+  icon: "https://i.ibb.co/KpZGhWnG/Thinkbase-Icono-B-Git-Hub-Menos-1-MB.png",
+  // Full technological banner with neon glow (1774 x 887 HD)
+  full: "https://i.ibb.co/7xZjKSmF/Logo-tecnolo-gico-Thinkbase-con-brillo-neo-n.png",
+  localIcon: "/images/thinkbase-icon.png",
+  localFull: "/images/thinkbase-full.png",
+};
+
+/**
+ * ThinkBase Logo component with official neon-glow artwork & icon assets.
+ */
 export function ThinkBaseLogo({
-  markSize = 34,
+  markSize = 26,
   showWordmark = true,
+  variant = "icon",
   className = "",
+  glow = false,
 }: ThinkBaseLogoProps) {
-  return (
-    <span className={`inline-flex items-center gap-2.5 ${className}`}>
-      <svg
-        aria-hidden="true"
-        width={markSize}
-        height={markSize}
-        viewBox="0 0 100 100"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
+  const [hasError, setHasError] = useState(false);
+
+  const imgSrc = hasError
+    ? variant === "full"
+      ? THINKBASE_LOGOS.localFull
+      : THINKBASE_LOGOS.localIcon
+    : variant === "full"
+    ? THINKBASE_LOGOS.full
+    : THINKBASE_LOGOS.icon;
+
+  if (variant === "full") {
+    return (
+      <span
+        className={`inline-flex items-center ${
+          glow ? "drop-shadow-[0_0_12px_rgba(20,228,244,0.45)]" : ""
+        } ${className}`}
       >
-        <defs>
-          <linearGradient id="thinkbase-gradient" x1="7" y1="8" x2="88" y2="92" gradientUnits="userSpaceOnUse">
-            <stop stopColor="#14E4F4" />
-            <stop offset="0.48" stopColor="#124BFF" />
-            <stop offset="1" stopColor="#C84BFF" />
-          </linearGradient>
-        </defs>
-        <path
-          d="M15 12H70C88 12 94 31 80 43L31 84H82"
-          stroke="url(#thinkbase-gradient)"
-          strokeWidth="14"
-          strokeLinecap="round"
-          strokeLinejoin="round"
+        <img
+          src={imgSrc}
+          alt="ThinkBase Technology"
+          className="h-auto w-auto object-contain transition-transform duration-200 hover:scale-102"
+          style={{ maxHeight: `${markSize}px` }}
+          onError={() => setHasError(true)}
+          loading="lazy"
         />
-        <path
-          d="M17 47V82"
-          stroke="url(#thinkbase-gradient)"
-          strokeWidth="14"
-          strokeLinecap="round"
+      </span>
+    );
+  }
+
+  return (
+    <span className={`inline-flex items-center gap-2 ${className}`}>
+      <span
+        className={`relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/10 ${
+          glow ? "shadow-[0_0_12px_rgba(20,228,244,0.4)]" : "shadow-xs"
+        }`}
+        style={{ width: `${markSize}px`, height: `${markSize}px` }}
+      >
+        <img
+          src={imgSrc}
+          alt="ThinkBase Icon"
+          className="h-full w-full object-cover"
+          onError={() => setHasError(true)}
+          loading="lazy"
         />
-        <path
-          d="M18 48L47 24"
-          stroke="url(#thinkbase-gradient)"
-          strokeWidth="14"
-          strokeLinecap="round"
-        />
-      </svg>
+      </span>
       {showWordmark && (
-        <span className="font-semibold tracking-[-0.035em] text-nutridex-text-primary">
-          Think<span className="font-normal text-nutridex-text-secondary">Base</span>
+        <span className="font-extrabold tracking-tight text-nutridex-text-primary text-xs sm:text-sm">
+          Think<span className="text-nutridex-cyan font-bold">Base</span>
         </span>
       )}
     </span>

@@ -19,7 +19,7 @@ export function Breadcrumb({ items }: BreadcrumbProps) {
   const pathname = usePathname();
 
   return (
-    <nav aria-label="Ruta de navegación" className="flex items-center gap-1 text-[11px] leading-none">
+    <nav aria-label="Ruta de navegación" className="flex items-center gap-1 text-xs leading-none">
       {items.map((item, index) => {
         const isLast = index === items.length - 1;
         const active = item.href === pathname || (item.href === "/" && pathname === "/");

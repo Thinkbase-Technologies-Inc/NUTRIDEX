@@ -2,7 +2,7 @@
 
 import { createContext, useCallback, useMemo, useContext, useReducer } from "react";
 import type { ReactNode } from "react";
-import { CheckCircle2, AlertTriangle, Info } from "lucide-react";
+import { CheckCircle2, AlertTriangle, Info, X } from "lucide-react";
 
 type ToastType = "success" | "error" | "info";
 
@@ -112,31 +112,30 @@ export function ToastProvider({ children }: ToastProviderProps) {
   return (
     <ToastContext.Provider value={{ showToast, dismissToast }}>
       {children}
-      <div className="fixed z-[100] pointer-events-none bottom-5 left-1/2 -translate-x-1/2 flex flex-col gap-2 lg:flex-col lg:bottom-5 lg:left-[calc(100%-2rem)] lg:translate-x-0 lg:w-full lg:items-end">
+      <div className="fixed z-[100] pointer-events-none bottom-20 md:bottom-6 right-4 left-4 md:left-auto md:w-96 flex flex-col gap-2.5 items-end">
         {openToasts.map((toast) => {
           const Icon = toast.type === "success" ? CheckCircle2 : toast.type === "error" ? AlertTriangle : Info;
           return (
             <div
               key={toast.id}
-              className="pointer-events-auto flex w-full max-w-sm flex-col gap-1 rounded-2xl border border-nutridex-border bg-nutridex-surface p-4 shadow-[0_30px_60px_-30px_rgba(24,62,26,0.45)] transition-all duration-200 transform ease-out"
-              style={{
-                opacity: toast.open === false ? 0 : 1,
-                transform: toast.open === false ? "translateY(10px)" : "translateY(0)",
-              }}
+              className="pointer-events-auto flex w-full items-start justify-between gap-3 rounded-2xl border border-nutridex-border bg-nutridex-surface p-4 shadow-xl animate__animated animate__fadeInUp animate__faster transition-all"
               role="alert"
               aria-live="polite"
             >
-              <div className="flex gap-3">
-                <div className="shrink-0 rounded-full p-1.5">
-                  <Icon
-                    className={`h-4 w-4 ${
-                      toast.type === "success" ? "text-nutridex-primary" : toast.type === "error" ? "text-nutridex-danger" : "text-nutridex-text-secondary"
-                    }`}
-                    aria-hidden
-                  />
+              <div className="flex gap-3 min-w-0">
+                <div
+                  className={`shrink-0 rounded-xl p-2 ${
+                    toast.type === "success"
+                      ? "bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400"
+                      : toast.type === "error"
+                      ? "bg-rose-50 text-rose-600 dark:bg-rose-950/40 dark:text-rose-400"
+                      : "bg-cyan-50 text-cyan-600 dark:bg-cyan-950/40 dark:text-cyan-400"
+                  }`}
+                >
+                  <Icon className="h-4 w-4" aria-hidden />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h4 className="text-sm font-semibold text-nutridex-text-primary">{toast.title}</h4>
+                  <h4 className="text-xs sm:text-sm font-bold text-nutridex-text-primary">{toast.title}</h4>
                   {toast.description && (
                     <p className="mt-0.5 text-xs text-nutridex-text-secondary">{toast.description}</p>
                   )}
@@ -146,9 +145,9 @@ export function ToastProvider({ children }: ToastProviderProps) {
                 type="button"
                 onClick={() => dismissToast(toast.id)}
                 aria-label="Descartar notificación"
-                className="shrink-0 rounded p-1 text-nutridex-text-secondary hover:bg-nutridex-surface-muted hover:text-nutridex-text-primary focus-visible:outline-2 focus-visible:outline-nutridex-primary"
+                className="shrink-0 rounded-lg p-1 text-nutridex-text-secondary hover:bg-nutridex-surface-muted hover:text-nutridex-text-primary transition-colors"
               >
-                <span className="sr-only">Descartar</span>
+                <X className="h-4 w-4" />
               </button>
             </div>
           );

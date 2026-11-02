@@ -1,53 +1,74 @@
 @import "tailwindcss";
 @import "@heroui/styles";
+@import "animate.css";
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 :root {
-  /* Brand / semantic tokens — airy, fresh HealthTech palette */
-  --nutridex-primary: #2e7d32;
-  --nutridex-primary-hover: #256628;
-  --nutridex-primary-soft: #e6f3e4;
-  --nutridex-accent: #4caf50;
+  /* Gleb Kuznetsov & Sage HealthTech Palette */
+  --nutridex-primary: #15803d;
+  --nutridex-primary-hover: #166534;
+  --nutridex-primary-soft: #dcfce7;
+  --nutridex-accent: #22c55e;
+  --nutridex-cyan: #06b6d4;
+  --nutridex-cyan-deep: #0284c7;
 
-  --nutridex-background: #edf4e9;
+  /* Calming light sage/mint background like in mobile & desktop mockups */
+  --nutridex-background: #edf4ee;
   --nutridex-surface: #ffffff;
-  --nutridex-surface-muted: #f3f7f0;
+  --nutridex-surface-muted: #f4f8f4;
+  --nutridex-surface-card: #ffffff;
 
-  --nutridex-text-primary: #1b2a1c;
-  --nutridex-text-secondary: #6d7c6f;
+  /* Pastels matching the mockups */
+  --nutridex-mint: #dcf5df;
+  --nutridex-mint-text: #166534;
+  --nutridex-peach: #ffedd5;
+  --nutridex-peach-text: #c2410c;
+  --nutridex-ice: #e0f2fe;
+  --nutridex-ice-text: #0369a1;
 
-  --nutridex-border: #e0eadd;
+  --nutridex-text-primary: #141c16;
+  --nutridex-text-secondary: #5a6e60;
 
-  --nutridex-success: #2e7d32;
-  --nutridex-warning: #c9822b;
-  --nutridex-danger: #cd5555;
+  --nutridex-border: #dae5db;
 
-  --nutridex-ink: #141c15;
-  --nutridex-chip: #f6f8f4;
+  --nutridex-success: #16a34a;
+  --nutridex-warning: #f59e0b;
+  --nutridex-danger: #ef4444;
+
+  --nutridex-dock: #181d19;
 }
 
 [data-theme="dark"] {
-  --nutridex-primary: #6fce74;
-  --nutridex-primary-hover: #86dc8a;
-  --nutridex-primary-soft: #1e3320;
-  --nutridex-accent: #4caf50;
+  --nutridex-primary: #4ade80;
+  --nutridex-primary-hover: #86efac;
+  --nutridex-primary-soft: rgba(74, 222, 128, 0.14);
+  --nutridex-accent: #22c55e;
+  --nutridex-cyan: #38bdf8;
+  --nutridex-cyan-deep: #0284c7;
 
-  --nutridex-background: #101712;
-  --nutridex-surface: #18201a;
-  --nutridex-surface-muted: #1f2921;
+  --nutridex-background: #0f1612;
+  --nutridex-surface: #17211b;
+  --nutridex-surface-muted: #1e2b23;
+  --nutridex-surface-card: #17211b;
 
-  --nutridex-text-primary: #eaf2ea;
-  --nutridex-text-secondary: #a4b3a6;
+  --nutridex-mint: rgba(74, 222, 128, 0.15);
+  --nutridex-mint-text: #86efac;
+  --nutridex-peach: rgba(251, 146, 60, 0.15);
+  --nutridex-peach-text: #fdba74;
+  --nutridex-ice: rgba(56, 189, 248, 0.15);
+  --nutridex-ice-text: #7dd3fc;
 
-  --nutridex-border: #2b382d;
+  --nutridex-text-primary: #f0f7f2;
+  --nutridex-text-secondary: #8ca293;
 
-  --nutridex-success: #6fce74;
-  --nutridex-warning: #e0a75a;
-  --nutridex-danger: #e78989;
+  --nutridex-border: #233329;
 
-  --nutridex-ink: #eaf2ea;
-  --nutridex-chip: #1f2921;
+  --nutridex-success: #4ade80;
+  --nutridex-warning: #fbbf24;
+  --nutridex-danger: #f87171;
+
+  --nutridex-dock: #0b0f0c;
 }
 
 @theme inline {
@@ -55,23 +76,32 @@
   --color-nutridex-primary-hover: var(--nutridex-primary-hover);
   --color-nutridex-primary-soft: var(--nutridex-primary-soft);
   --color-nutridex-accent: var(--nutridex-accent);
+  --color-nutridex-cyan: var(--nutridex-cyan);
+  --color-nutridex-cyan-deep: var(--nutridex-cyan-deep);
   --color-nutridex-background: var(--nutridex-background);
   --color-nutridex-surface: var(--nutridex-surface);
   --color-nutridex-surface-muted: var(--nutridex-surface-muted);
+  --color-nutridex-surface-card: var(--nutridex-surface-card);
+  --color-nutridex-mint: var(--nutridex-mint);
+  --color-nutridex-mint-text: var(--nutridex-mint-text);
+  --color-nutridex-peach: var(--nutridex-peach);
+  --color-nutridex-peach-text: var(--nutridex-peach-text);
+  --color-nutridex-ice: var(--nutridex-ice);
+  --color-nutridex-ice-text: var(--nutridex-ice-text);
   --color-nutridex-text-primary: var(--nutridex-text-primary);
   --color-nutridex-text-secondary: var(--nutridex-text-secondary);
   --color-nutridex-border: var(--nutridex-border);
   --color-nutridex-success: var(--nutridex-success);
   --color-nutridex-warning: var(--nutridex-warning);
   --color-nutridex-danger: var(--nutridex-danger);
-  --color-nutridex-ink: var(--nutridex-ink);
-  --color-nutridex-chip: var(--nutridex-chip);
+  --color-nutridex-dock: var(--nutridex-dock);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 html {
   scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -82,6 +112,9 @@ body {
   font-variant-numeric: tabular-nums;
   min-height: 100vh;
   overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 * {
@@ -93,7 +126,26 @@ body {
   color: var(--nutridex-primary);
 }
 
-/* Soft ambient background — mirrors the airy reference layouts */
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--nutridex-border);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--nutridex-text-secondary);
+}
+
+/* Organic geometric ambient arcs from desktop reference */
 .nx-ambient {
   position: fixed;
   inset: 0;
@@ -101,55 +153,74 @@ body {
   overflow: hidden;
   pointer-events: none;
 }
-.nx-ambient::before,
+
+.nx-ambient::before {
+  content: "";
+  position: absolute;
+  top: -180px;
+  left: -180px;
+  width: 480px;
+  height: 480px;
+  border-radius: 9999px;
+  border: 45px solid rgba(34, 197, 94, 0.12);
+  filter: blur(2px);
+}
+
 .nx-ambient::after {
   content: "";
   position: absolute;
+  top: 40px;
+  right: -100px;
+  width: 380px;
+  height: 380px;
   border-radius: 9999px;
-  filter: blur(70px);
-  opacity: 0.55;
-}
-.nx-ambient::before {
-  width: 460px;
-  height: 460px;
-  top: -160px;
-  right: -120px;
-  background: radial-gradient(circle, #cdecc8 0%, rgba(205, 236, 200, 0) 70%);
-}
-.nx-ambient::after {
-  width: 520px;
-  height: 520px;
-  bottom: -220px;
-  left: -160px;
-  background: radial-gradient(circle, #d8efd0 0%, rgba(216, 239, 208, 0) 70%);
-}
-[data-theme="dark"] .nx-ambient::before,
-[data-theme="dark"] .nx-ambient::after {
-  opacity: 0.18;
+  background: radial-gradient(circle, color-mix(in srgb, var(--nutridex-accent) 8%, transparent) 0%, transparent 70%);
 }
 
+[data-theme="dark"] .nx-ambient::before {
+  border-color: color-mix(in srgb, var(--nutridex-accent) 7%, transparent);
+}
+
+[data-theme="dark"] .nx-ambient::after {
+  background: radial-gradient(circle, color-mix(in srgb, var(--nutridex-accent) 6%, transparent) 0%, transparent 70%);
+}
+
+/* Modern Card with rounded-3xl geometry matching the mockups */
 .nx-card {
   background: var(--nutridex-surface);
   border: 1px solid var(--nutridex-border);
   border-radius: 1.5rem;
-  box-shadow: 0 24px 48px -36px rgba(24, 62, 26, 0.45);
+  box-shadow: 0 4px 20px -2px rgba(18, 38, 24, 0.04);
+}
+
+.nx-card-rounded {
+  border-radius: 1.75rem;
+}
+
+/* Fixed Hardware-Accelerated Mobile Dock */
+.nx-mobile-dock {
+  position: fixed;
+  bottom: max(14px, env(safe-area-inset-bottom, 14px));
+  left: 0;
+  right: 0;
+  z-index: 90;
+  pointer-events: none;
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  will-change: transform;
 }
 
 .nx-num {
   font-variant-numeric: tabular-nums;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.025em;
 }
 
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
