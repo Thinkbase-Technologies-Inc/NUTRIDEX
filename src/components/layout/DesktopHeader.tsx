@@ -18,7 +18,6 @@ import {
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useSearchStore } from "@/stores/useSearchStore";
 import { useToast } from "@/components/ui/Toast";
-import { NeonStatusBadge } from "@/components/shared/NeonStatusBadge";
 import { NotificationDropdown } from "@/components/layout/NotificationDropdown";
 import { Camera } from "lucide-react";
 
@@ -64,9 +63,9 @@ export function DesktopHeader() {
   };
 
   return (
-    <header className="hidden md:flex h-16 w-full items-center justify-between border-b border-nutridex-border bg-nutridex-surface/85 px-8 backdrop-blur-md sticky top-0 z-30">
+    <header className="hidden md:flex h-16 w-full items-center justify-between border-b border-nutridex-border bg-nutridex-surface/85 px-6 lg:px-8 backdrop-blur-md sticky top-0 z-30">
       {/* Search Input / Spotlight trigger */}
-      <div className="relative w-80 max-w-sm">
+      <div className="relative w-72 lg:w-80 max-w-sm shrink-0">
         <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-nutridex-text-secondary pointer-events-none" aria-hidden />
         <input
           type="search"
@@ -89,12 +88,9 @@ export function DesktopHeader() {
       </div>
 
       {/* Right Controls */}
-      <div className="flex items-center gap-3">
-        {/* Neon Database Status */}
-        <NeonStatusBadge compact />
-
+      <div className="flex items-center gap-3 shrink-0">
         {/* Local-first Pill */}
-        <div className="flex items-center gap-1.5 rounded-full bg-nutridex-mint/60 px-3 py-1 text-xs font-semibold text-nutridex-mint-text border border-nutridex-mint">
+        <div className="hidden lg:flex items-center gap-1.5 rounded-full bg-nutridex-mint/60 px-3 py-1.5 text-xs font-semibold text-nutridex-mint-text border border-nutridex-mint shadow-2xs">
           <Sparkles className="h-3 w-3" aria-hidden />
           <span>ThinkBase Cloudless</span>
         </div>
@@ -104,28 +100,34 @@ export function DesktopHeader() {
 
         {/* User Capsule / Auth Controls */}
         {isAuthenticated && user ? (
-          <div className="relative" ref={dropdownRef}>
+          <div className="relative shrink-0" ref={dropdownRef}>
             <button
               type="button"
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="flex items-center gap-2.5 rounded-full border border-nutridex-border bg-nutridex-surface p-1 pr-3 hover:bg-nutridex-surface-muted transition-all active:scale-98"
+              aria-label={`Menú de usuario: ${user.name}`}
+              aria-expanded={isDropdownOpen}
+              className="flex items-center gap-2.5 rounded-full border border-nutridex-border bg-nutridex-surface py-1 pl-1 pr-3.5 hover:bg-nutridex-surface-muted/80 transition-all active:scale-[0.98] shrink-0 shadow-2xs group focus-visible:outline-2 focus-visible:outline-nutridex-primary"
             >
-              <div className="relative h-8 w-8 overflow-hidden rounded-full border border-nutridex-border">
+              <div className="relative h-8 w-8 shrink-0 overflow-hidden rounded-full border border-nutridex-border ring-1 ring-black/5 dark:ring-white/5">
                 <img
                   src={user.avatarUrl}
                   alt={user.name}
                   className="h-full w-full object-cover"
                 />
               </div>
-              <div className="flex flex-col text-left">
-                <span className="text-xs font-bold leading-tight text-nutridex-text-primary">
+              <div className="flex flex-col text-left min-w-0 pr-0.5">
+                <span className="text-xs font-bold leading-tight text-nutridex-text-primary whitespace-nowrap truncate max-w-[140px]">
                   {user.name}
                 </span>
-                <span className="text-xs text-nutridex-text-secondary">
-                  {user.planName ?? "Plan Activo"}
+                <span className="text-xs text-nutridex-text-secondary leading-tight whitespace-nowrap truncate max-w-[140px]">
+                  {user.planName ?? "Plan Activo · ThinkBase"}
                 </span>
               </div>
-              <ChevronDown className="h-3.5 w-3.5 text-nutridex-text-secondary ml-1" />
+              <ChevronDown
+                className={`h-3.5 w-3.5 text-nutridex-text-secondary shrink-0 transition-transform duration-200 ml-0.5 ${
+                  isDropdownOpen ? "rotate-180 text-nutridex-primary" : "group-hover:text-nutridex-text-primary"
+                }`}
+              />
             </button>
 
             {/* Dropdown Menu */}

@@ -42,7 +42,7 @@ export const DEMO_ACCOUNTS: StoredAccount[] = [
       avatarUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=240&q=80",
       targetCalories: 2200,
       targetEquivalents: 16,
-      planName: "Plans Meals · Pro",
+      planName: "Plan Pro · ThinkBase",
       createdAt: "2026-02-01T10:00:00.000Z",
     },
     passwordHash: "gleb123",
