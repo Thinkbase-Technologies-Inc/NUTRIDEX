@@ -27,6 +27,7 @@ import {
   Salad,
   Cookie,
   Flame,
+  TrendingUp,
 } from "lucide-react";
 import { getFoods, getGroups } from "@/data/foods";
 import { usePlannerStore } from "@/stores/usePlannerStore";
@@ -36,6 +37,7 @@ import { useSearchStore } from "@/stores/useSearchStore";
 import { NotificationDropdown } from "@/components/layout/NotificationDropdown";
 import { Icons8Img } from "@/components/ui/Icons8Img";
 import { getGroupIcon, ICONS8_MEALS, ICONS8_METRICS } from "@/data/icons8";
+import { WaterTrackerWidget } from "@/components/progress/WaterTrackerWidget";
 
 const GROUP_ICONS: Record<string, React.ComponentType<{ className?: string; style?: React.CSSProperties }>> = {
   verduras: Salad,
@@ -422,14 +424,26 @@ export default function HomePage() {
             </div>
 
             {/* Quick action button to meal planner */}
-            <Link
-              href="/mi-plan"
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-nutridex-primary py-2.5 text-xs font-bold text-white hover:bg-nutridex-primary-hover transition-colors shadow-xs"
-            >
-              <CalendarDays className="h-4 w-4" />
-              <span>Abrir planificador completo</span>
-            </Link>
+            <div className="grid grid-cols-2 gap-2">
+              <Link
+                href="/mi-plan"
+                className="flex items-center justify-center gap-1.5 rounded-xl bg-nutridex-primary py-2.5 text-xs font-bold text-white hover:bg-nutridex-primary-hover transition-colors shadow-xs"
+              >
+                <CalendarDays className="h-4 w-4" />
+                <span>Planificador</span>
+              </Link>
+              <Link
+                href="/progreso"
+                className="flex items-center justify-center gap-1.5 rounded-xl border border-nutridex-border bg-nutridex-surface py-2.5 text-xs font-bold text-nutridex-text-primary hover:bg-nutridex-surface-muted transition-colors shadow-xs"
+              >
+                <TrendingUp className="h-4 w-4 text-nutridex-primary" />
+                <span>Ver progreso</span>
+              </Link>
+            </div>
           </div>
+
+          {/* Water Tracker Widget on Home */}
+          <WaterTrackerWidget compact />
         </div>
       </div>
 

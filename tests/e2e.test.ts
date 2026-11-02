@@ -15,6 +15,12 @@ import {
   getRecipesFromNeon,
   findUserByEmail,
   getNotificationsFromNeon,
+  getProgressLogsFromNeon,
+  addProgressLogInNeon,
+  getWaterIntakeFromNeon,
+  saveWaterIntakeInNeon,
+  getShoppingListFromNeon,
+  saveShoppingItemInNeon,
 } from "../src/lib/db";
 import { getFoods, getGroups } from "../src/data/foods";
 
@@ -75,5 +81,45 @@ describe("NutriDex E2E & Localización (Español México)", { timeout: 30000 }, 
       expect(n.message).not.toContain("NeonDB");
       expect(n.message).not.toContain("Lakebase Postgres");
     }
+  });
+
+  it("gestiona el registro de peso e hidratación en la nube", async () => {
+    const email = "emily.andrian@thinkbase.app";
+
+    // Water tracking
+    const today = new Date().toISOString().split("T")[0];
+    await saveWaterIntakeInNeon(email, today, 1750, 2000);
+    const water = await getWaterIntakeFromNeon(email, today);
+    expect(water.intake_ml).toBe(1750);
+    expect(water.target_ml).toBe(2000);
+
+    // Progress weight log
+    const savedLog = await addProgressLogInNeon(email, {
+      date: today,
+      weight: 67.8,
+      target_weight: 65.0,
+      waist: 71.5,
+      notes: "E2E Test Note",
+    });
+    expect(savedLog.weight).toBe(67.8);
+    expect(savedLog.waist).toBe(71.5);
+
+    const logs = await getProgressLogsFromNeon(email);
+    expect(logs.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it("gestiona la lista de compras del súper en la nube", async () => {
+    const email = "emily.andrian@thinkbase.app";
+    const item = await saveShoppingItemInNeon(email, {
+      item_name: "Manzanas Gala",
+      category: "Frutas y Verduras",
+      quantity: "1 kg",
+      is_purchased: false,
+    });
+    expect(item.id).toBeDefined();
+    expect(item.item_name).toBe("Manzanas Gala");
+
+    const list = await getShoppingListFromNeon(email);
+    expect(list.some((i) => i.item_name === "Manzanas Gala")).toBe(true);
   });
 });

@@ -16,6 +16,8 @@ import {
   LogOut,
   UserPlus,
   ChefHat,
+  TrendingUp,
+  ShoppingCart,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/shared/ThemeToggle";
 import { ThinkBaseLogo } from "@/components/ui/ThinkBaseLogo";
@@ -32,6 +34,8 @@ interface NavItem {
 const DASHBOARD_ITEMS: NavItem[] = [
   { label: "Overview", href: "/", icon: Home },
   { label: "Meal Planner", href: "/mi-plan", icon: CalendarDays },
+  { label: "Progreso", href: "/progreso", icon: TrendingUp },
+  { label: "Lista del súper", href: "/lista-compras", icon: ShoppingCart },
   { label: "Recetas", href: "/recetas", icon: ChefHat },
   { label: "Alimentos", href: "/alimentos", icon: LayoutGrid },
   { label: "Calculadora", href: "/calculadora", icon: Calculator },

@@ -376,6 +376,96 @@ export async function initDatabase() {
     );
   `;
 
+  // 9. Progress & Measurements table
+  try {
+    await db`
+      CREATE TABLE IF NOT EXISTS nutridex_progress (
+        id TEXT PRIMARY KEY,
+        user_email TEXT NOT NULL,
+        date TEXT NOT NULL,
+        weight NUMERIC NOT NULL,
+        target_weight NUMERIC DEFAULT 65,
+        waist NUMERIC,
+        hip NUMERIC,
+        chest NUMERIC,
+        body_fat NUMERIC,
+        notes TEXT,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+      );
+    `;
+  } catch {}
+
+  // 10. Water Hydration Tracking table
+  try {
+    await db`
+      CREATE TABLE IF NOT EXISTS nutridex_water (
+        id TEXT PRIMARY KEY,
+        user_email TEXT NOT NULL,
+        date TEXT NOT NULL,
+        intake_ml NUMERIC NOT NULL DEFAULT 0,
+        target_ml NUMERIC NOT NULL DEFAULT 2000,
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+      );
+    `;
+  } catch {}
+
+  // 11. Shopping List table
+  try {
+    await db`
+      CREATE TABLE IF NOT EXISTS nutridex_shopping (
+        id TEXT PRIMARY KEY,
+        user_email TEXT NOT NULL,
+        item_name TEXT NOT NULL,
+        category TEXT NOT NULL,
+        quantity TEXT NOT NULL,
+        is_purchased BOOLEAN DEFAULT FALSE,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+      );
+    `;
+  } catch {}
+
+  // Seed demo progress for Emily
+  const emilyEmail = "emily.andrian@thinkbase.app";
+  await db`
+    INSERT INTO nutridex_progress (id, user_email, date, weight, target_weight, waist, hip, chest, body_fat, notes)
+    VALUES (
+      'prog-emily-init',
+      ${emilyEmail},
+      '2026-11-02',
+      68.0,
+      65.0,
+      72,
+      96,
+      88,
+      21.5,
+      'Peso inicial registrado con plan activo'
+    )
+    ON CONFLICT (id) DO NOTHING;
+  `;
+
+  const emilyWaterId = `water-${emilyEmail}-2026-11-02`;
+  await db`
+    INSERT INTO nutridex_water (id, user_email, date, intake_ml, target_ml, updated_at)
+    VALUES (
+      ${emilyWaterId},
+      ${emilyEmail},
+      '2026-11-02',
+      1250,
+      2000,
+      NOW()
+    )
+    ON CONFLICT (id) DO UPDATE SET
+      intake_ml = EXCLUDED.intake_ml,
+      target_ml = EXCLUDED.target_ml,
+      updated_at = NOW();
+  `;
+
+  // Clean any duplicate legacy water records if any
+  await db`
+    DELETE FROM nutridex_water
+    WHERE id = 'water-emily-today';
+  `;
+
   return { success: true, branch };
 }
 
@@ -732,6 +822,248 @@ export async function removeUserFavoriteFromNeon(userEmail: string, foodId: stri
   await db`
     DELETE FROM nutridex_favorites 
     WHERE user_email = ${userEmail.toLowerCase().trim()} AND food_id = ${foodId};
+  `;
+  return { success: true };
+}
+
+/* =========================================================================
+ * Progress & Biometrics
+ * ========================================================================= */
+
+export interface ProgressEntry {
+  id: string;
+  user_email: string;
+  date: string;
+  weight: number;
+  target_weight: number;
+  waist?: number;
+  hip?: number;
+  chest?: number;
+  body_fat?: number;
+  notes?: string;
+  created_at?: string;
+}
+
+export async function getProgressLogsFromNeon(userEmail: string): Promise<ProgressEntry[]> {
+  const db = getDb();
+  const rows = await db`
+    SELECT * FROM nutridex_progress
+    WHERE user_email = ${userEmail.toLowerCase().trim()}
+    ORDER BY date DESC, created_at DESC;
+  `;
+  return rows.map((r) => ({
+    id: r.id as string,
+    user_email: r.user_email as string,
+    date: r.date as string,
+    weight: Number(r.weight),
+    target_weight: Number(r.target_weight ?? 65),
+    waist: r.waist ? Number(r.waist) : undefined,
+    hip: r.hip ? Number(r.hip) : undefined,
+    chest: r.chest ? Number(r.chest) : undefined,
+    body_fat: r.body_fat ? Number(r.body_fat) : undefined,
+    notes: (r.notes as string) ?? undefined,
+    created_at: (r.created_at as Date)?.toISOString(),
+  }));
+}
+
+export async function addProgressLogInNeon(
+  userEmail: string,
+  entry: Omit<ProgressEntry, "id" | "user_email"> & { id?: string }
+): Promise<ProgressEntry> {
+  const db = getDb();
+  const id = entry.id ?? `prog-${Date.now()}`;
+  const targetWeight = entry.target_weight ?? 65;
+
+  await db`
+    INSERT INTO nutridex_progress (
+      id, user_email, date, weight, target_weight, waist, hip, chest, body_fat, notes
+    )
+    VALUES (
+      ${id}, ${userEmail.toLowerCase().trim()}, ${entry.date}, ${entry.weight},
+      ${targetWeight}, ${entry.waist ?? null}, ${entry.hip ?? null}, ${entry.chest ?? null},
+      ${entry.body_fat ?? null}, ${entry.notes ?? null}
+    )
+    ON CONFLICT (id) DO UPDATE SET
+      weight = EXCLUDED.weight,
+      target_weight = EXCLUDED.target_weight,
+      waist = EXCLUDED.waist,
+      hip = EXCLUDED.hip,
+      chest = EXCLUDED.chest,
+      body_fat = EXCLUDED.body_fat,
+      notes = EXCLUDED.notes;
+  `;
+
+  return {
+    id,
+    user_email: userEmail,
+    date: entry.date,
+    weight: entry.weight,
+    target_weight: targetWeight,
+    waist: entry.waist,
+    hip: entry.hip,
+    chest: entry.chest,
+    body_fat: entry.body_fat,
+    notes: entry.notes,
+  };
+}
+
+export async function deleteProgressLogInNeon(id: string, userEmail: string) {
+  const db = getDb();
+  await db`
+    DELETE FROM nutridex_progress
+    WHERE id = ${id} AND user_email = ${userEmail.toLowerCase().trim()};
+  `;
+  return { success: true };
+}
+
+/* =========================================================================
+ * Water Hydration Tracker
+ * ========================================================================= */
+
+export interface WaterLog {
+  user_email: string;
+  date: string;
+  intake_ml: number;
+  target_ml: number;
+  updated_at?: string;
+}
+
+export async function getWaterIntakeFromNeon(userEmail: string, date: string): Promise<WaterLog> {
+  const db = getDb();
+  const rows = await db`
+    SELECT * FROM nutridex_water
+    WHERE user_email = ${userEmail.toLowerCase().trim()} AND date = ${date}
+    ORDER BY updated_at DESC
+    LIMIT 1;
+  `;
+  if (rows.length === 0) {
+    return {
+      user_email: userEmail,
+      date,
+      intake_ml: 0,
+      target_ml: 2000,
+    };
+  }
+  const r = rows[0];
+  return {
+    user_email: r.user_email as string,
+    date: r.date as string,
+    intake_ml: Number(r.intake_ml),
+    target_ml: Number(r.target_ml),
+    updated_at: (r.updated_at as Date)?.toISOString(),
+  };
+}
+
+export async function saveWaterIntakeInNeon(
+  userEmail: string,
+  date: string,
+  intakeMl: number,
+  targetMl = 2000
+): Promise<WaterLog> {
+  const db = getDb();
+  const id = `water-${userEmail.toLowerCase().trim()}-${date}`;
+
+  await db`
+    INSERT INTO nutridex_water (id, user_email, date, intake_ml, target_ml, updated_at)
+    VALUES (${id}, ${userEmail.toLowerCase().trim()}, ${date}, ${intakeMl}, ${targetMl}, NOW())
+    ON CONFLICT (id) DO UPDATE SET
+      intake_ml = EXCLUDED.intake_ml,
+      target_ml = EXCLUDED.target_ml,
+      updated_at = NOW();
+  `;
+
+  return {
+    user_email: userEmail,
+    date,
+    intake_ml: intakeMl,
+    target_ml: targetMl,
+  };
+}
+
+/* =========================================================================
+ * Smart Grocery / Shopping List
+ * ========================================================================= */
+
+export interface ShoppingItemRow {
+  id: string;
+  user_email: string;
+  item_name: string;
+  category: string;
+  quantity: string;
+  is_purchased: boolean;
+  created_at?: string;
+}
+
+export async function getShoppingListFromNeon(userEmail: string): Promise<ShoppingItemRow[]> {
+  const db = getDb();
+  const rows = await db`
+    SELECT * FROM nutridex_shopping
+    WHERE user_email = ${userEmail.toLowerCase().trim()}
+    ORDER BY is_purchased ASC, category ASC, created_at DESC;
+  `;
+  return rows.map((r) => ({
+    id: r.id as string,
+    user_email: r.user_email as string,
+    item_name: r.item_name as string,
+    category: r.category as string,
+    quantity: r.quantity as string,
+    is_purchased: Boolean(r.is_purchased),
+    created_at: (r.created_at as Date)?.toISOString(),
+  }));
+}
+
+export async function saveShoppingItemInNeon(
+  userEmail: string,
+  item: { id?: string; item_name: string; category: string; quantity: string; is_purchased?: boolean }
+): Promise<ShoppingItemRow> {
+  const db = getDb();
+  const id = item.id ?? `shop-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`;
+  const isPurchased = Boolean(item.is_purchased);
+
+  await db`
+    INSERT INTO nutridex_shopping (id, user_email, item_name, category, quantity, is_purchased)
+    VALUES (${id}, ${userEmail.toLowerCase().trim()}, ${item.item_name}, ${item.category}, ${item.quantity}, ${isPurchased})
+    ON CONFLICT (id) DO UPDATE SET
+      item_name = EXCLUDED.item_name,
+      category = EXCLUDED.category,
+      quantity = EXCLUDED.quantity,
+      is_purchased = EXCLUDED.is_purchased;
+  `;
+
+  return {
+    id,
+    user_email: userEmail,
+    item_name: item.item_name,
+    category: item.category,
+    quantity: item.quantity,
+    is_purchased: isPurchased,
+  };
+}
+
+export async function toggleShoppingItemInNeon(id: string, userEmail: string, isPurchased: boolean) {
+  const db = getDb();
+  await db`
+    UPDATE nutridex_shopping
+    SET is_purchased = ${isPurchased}
+    WHERE id = ${id} AND user_email = ${userEmail.toLowerCase().trim()};
+  `;
+  return { success: true };
+}
+
+export async function deleteShoppingItemInNeon(id: string, userEmail: string) {
+  const db = getDb();
+  await db`
+    DELETE FROM nutridex_shopping
+    WHERE id = ${id} AND user_email = ${userEmail.toLowerCase().trim()};
+  `;
+  return { success: true };
+}
+
+export async function clearShoppingListInNeon(userEmail: string) {
+  const db = getDb();
+  await db`
+    DELETE FROM nutridex_shopping
+    WHERE user_email = ${userEmail.toLowerCase().trim()};
   `;
   return { success: true };
 }
