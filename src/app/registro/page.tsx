@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useToast } from "@/components/ui/Toast";
+import { NutriDexIcon } from "@/components/ui/NutriDexIcon";
 import { ThinkBaseLogo } from "@/components/ui/ThinkBaseLogo";
 import {
   validateEmail,
@@ -97,13 +98,28 @@ export default function RegistroPage() {
     <div className="mx-auto flex min-h-[80vh] w-full max-w-md flex-col justify-center px-4 py-8 sm:px-6">
       {/* Brand Header */}
       <div className="flex flex-col items-center text-center mb-6 animate__animated animate__fadeInDown">
-        <ThinkBaseLogo markSize={36} variant="icon" showWordmark={true} glow className="mb-3" />
-        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-nutridex-text-primary">
-          Crear Cuenta
-        </h1>
-        <p className="text-xs sm:text-sm text-nutridex-text-secondary mt-1">
-          Únete a NutriDex by ThinkBase y organiza tus comidas
+        <div className="relative mb-3 group">
+          <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-emerald-500/25 to-cyan-500/25 blur-md opacity-80 group-hover:opacity-100 transition duration-300" />
+          <div className="relative rounded-2xl p-1 bg-nutridex-surface border border-nutridex-border shadow-md">
+            <NutriDexIcon size={52} glow={false} />
+          </div>
+        </div>
+
+        <div className="flex items-center justify-center gap-2">
+          <h1 className="text-3xl font-black tracking-tight text-nutridex-text-primary flex items-center leading-none">
+            Nutri<span className="text-nutridex-primary">Dex</span>
+          </h1>
+          <span className="rounded-full bg-nutridex-primary-soft px-2.5 py-0.5 text-xs font-bold text-nutridex-primary border border-nutridex-primary/20">
+            by ThinkBase
+          </span>
+        </div>
+        <p className="text-xs sm:text-sm text-nutridex-text-secondary mt-1 font-medium">
+          Equivalencias Claras · Nutrición Inteligente
         </p>
+
+        <h2 className="text-base sm:text-lg font-bold tracking-tight text-nutridex-text-primary mt-3">
+          Crear Cuenta
+        </h2>
       </div>
 
       <div className="nx-card p-6 sm:p-8 shadow-lg animate__animated animate__fadeInUp">

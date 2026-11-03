@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useToast } from "@/components/ui/Toast";
+import { NutriDexIcon } from "@/components/ui/NutriDexIcon";
 import { ThinkBaseLogo } from "@/components/ui/ThinkBaseLogo";
 import {
   validateEmail,
@@ -198,19 +199,36 @@ export function AuthModal() {
 
         {/* Modal Brand Header */}
         <div className="flex flex-col items-center text-center pb-5 border-b border-nutridex-border/60">
-          <ThinkBaseLogo markSize={36} variant="icon" showWordmark={true} glow className="mb-2" />
+          {/* NutriDex Brand Icon with Glow & Border */}
+          <div className="relative mb-3 group">
+            <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-emerald-500/25 to-cyan-500/25 blur-md opacity-80 group-hover:opacity-100 transition duration-300" />
+            <div className="relative rounded-2xl p-1 bg-nutridex-surface border border-nutridex-border shadow-md">
+              <NutriDexIcon size={48} glow={false} />
+            </div>
+          </div>
+
+          {/* App Name and By ThinkBase */}
+          <div className="flex items-center justify-center gap-2">
+            <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-nutridex-text-primary flex items-center leading-none">
+              Nutri<span className="text-nutridex-primary">Dex</span>
+            </h1>
+            <span className="rounded-full bg-nutridex-primary-soft px-2.5 py-0.5 text-xs font-bold text-nutridex-primary border border-nutridex-primary/20">
+              by ThinkBase
+            </span>
+          </div>
+          <p className="text-xs text-nutridex-text-secondary mt-1 font-medium">
+            Equivalencias Claras · Nutrición Inteligente
+          </p>
+
           <h2
             id={`${dialogId}-title`}
-            className="text-xl sm:text-2xl font-extrabold tracking-tight text-nutridex-text-primary"
+            className="text-base sm:text-lg font-bold tracking-tight text-nutridex-text-primary mt-3"
           >
             {mode === "login" ? "Iniciar Sesión" : "Crear Cuenta"}
           </h2>
-          <p className="text-xs text-nutridex-text-secondary mt-1">
-            NutriDex by ThinkBase · Inteligencia Nutricional
-          </p>
 
           {/* Mode Switch Tabs */}
-          <div className="mt-4 flex w-full rounded-2xl bg-nutridex-surface-muted p-1 border border-nutridex-border/50">
+          <div className="mt-3.5 flex w-full max-w-xs rounded-2xl bg-nutridex-surface-muted/90 p-1 border border-nutridex-border/70 shadow-2xs">
             <button
               type="button"
               onClick={() => {
@@ -218,9 +236,9 @@ export function AuthModal() {
                 openAuthModal("login");
                 setGeneralError(null);
               }}
-              className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all ${
+              className={`flex-1 py-1.5 text-xs font-bold rounded-xl transition-all duration-150 ${
                 mode === "login"
-                  ? "bg-nutridex-surface text-nutridex-text-primary shadow-xs"
+                  ? "bg-nutridex-surface text-nutridex-text-primary shadow-xs border border-nutridex-border/60"
                   : "text-nutridex-text-secondary hover:text-nutridex-text-primary"
               }`}
             >
@@ -233,9 +251,9 @@ export function AuthModal() {
                 openAuthModal("register");
                 setGeneralError(null);
               }}
-              className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all ${
+              className={`flex-1 py-1.5 text-xs font-bold rounded-xl transition-all duration-150 ${
                 mode === "register"
-                  ? "bg-nutridex-surface text-nutridex-text-primary shadow-xs"
+                  ? "bg-nutridex-surface text-nutridex-text-primary shadow-xs border border-nutridex-border/60"
                   : "text-nutridex-text-secondary hover:text-nutridex-text-primary"
               }`}
             >
@@ -254,27 +272,51 @@ export function AuthModal() {
 
         {/* Form Body */}
         {mode === "login" ? (
-          <form onSubmit={handleLoginSubmit} className="mt-5 space-y-4">
+          <form onSubmit={handleLoginSubmit} className="mt-4 space-y-3.5">
             {/* Quick Demo Fill Buttons */}
             <div className="rounded-2xl bg-nutridex-surface-muted/70 p-3 border border-nutridex-border/60">
-              <span className="text-xs font-bold text-nutridex-text-secondary block mb-1.5 flex items-center gap-1.5">
-                <Sparkles className="h-3.5 w-3.5 text-nutridex-cyan" />
-                Acceso demo con 1 clic:
+              <span className="text-xs font-bold text-nutridex-text-secondary block mb-2 flex items-center gap-1.5">
+                <Sparkles className="h-3.5 w-3.5 text-nutridex-primary" />
+                Acceso demo rápido (1 clic):
               </span>
-              <div className="flex flex-wrap gap-2">
+              <div className="grid grid-cols-2 gap-2">
                 <button
                   type="button"
                   onClick={() => fillDemoAccount("emily.andrian@thinkbase.app", "demo123")}
-                  className="rounded-lg bg-nutridex-surface border border-nutridex-border px-2.5 py-1 text-xs font-bold text-nutridex-text-primary hover:border-nutridex-primary hover:text-nutridex-primary transition-colors shadow-2xs"
+                  className="flex items-center gap-2 rounded-xl bg-nutridex-surface border border-nutridex-border p-2 text-left hover:border-nutridex-primary hover:bg-nutridex-surface-muted/50 transition-all shadow-2xs group"
                 >
-                  Emily Andrian
+                  <img
+                    src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=240&q=80"
+                    alt="Emily Andrian"
+                    className="h-6 w-6 rounded-full object-cover shrink-0 ring-1 ring-nutridex-border"
+                  />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs font-bold text-nutridex-text-primary truncate group-hover:text-nutridex-primary transition-colors">
+                      Emily Andrian
+                    </p>
+                    <p className="text-xs text-nutridex-text-secondary truncate">
+                      Plan Activo
+                    </p>
+                  </div>
                 </button>
                 <button
                   type="button"
                   onClick={() => fillDemoAccount("gleb.kuznetsov@thinkbase.app", "gleb123")}
-                  className="rounded-lg bg-nutridex-surface border border-nutridex-border px-2.5 py-1 text-xs font-bold text-nutridex-text-primary hover:border-nutridex-primary hover:text-nutridex-primary transition-colors shadow-2xs"
+                  className="flex items-center gap-2 rounded-xl bg-nutridex-surface border border-nutridex-border p-2 text-left hover:border-nutridex-primary hover:bg-nutridex-surface-muted/50 transition-all shadow-2xs group"
                 >
-                  Gleb Kuznetsov
+                  <img
+                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=240&q=80"
+                    alt="Gleb Kuznetsov"
+                    className="h-6 w-6 rounded-full object-cover shrink-0 ring-1 ring-nutridex-border"
+                  />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs font-bold text-nutridex-text-primary truncate group-hover:text-nutridex-primary transition-colors">
+                      Gleb Kuznetsov
+                    </p>
+                    <p className="text-xs text-nutridex-text-secondary truncate">
+                      Plan Pro
+                    </p>
+                  </div>
                 </button>
               </div>
             </div>
