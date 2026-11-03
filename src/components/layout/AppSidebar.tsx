@@ -1,7 +1,9 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { motion } from "framer-motion";
 import {
   Home,
   CalendarDays,
@@ -50,8 +52,13 @@ const EXTRAS_ITEMS: NavItem[] = [
 
 export function AppSidebar() {
   const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
   const { user, isAuthenticated, openAuthModal, logout } = useAuthStore();
   const { showToast } = useToast();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleLogout = () => {
     logout();
@@ -74,16 +81,27 @@ export function AppSidebar() {
           const Icon = item.icon;
 
           return (
-            <li key={item.href}>
+            <li key={item.href} className="relative">
               <Link
                 href={item.href}
                 aria-current={active ? "page" : undefined}
-                className={`group flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all duration-150 ${
+                className={`group relative z-10 flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-xs font-semibold transition-colors duration-150 ${
                   active
-                    ? "bg-nutridex-primary text-white shadow-sm font-bold"
+                    ? "text-white font-bold"
                     : "text-nutridex-text-secondary hover:text-nutridex-text-primary hover:bg-nutridex-surface-muted"
                 }`}
               >
+                {active && (
+                  <motion.div
+                    layoutId="sidebarActivePill"
+                    className="absolute inset-0 rounded-xl bg-nutridex-primary shadow-xs -z-10"
+                    transition={{
+                      type: "spring",
+                      stiffness: 450,
+                      damping: 35,
+                    }}
+                  />
+                )}
                 <Icon
                   className={`h-4 w-4 shrink-0 transition-transform ${
                     active ? "text-white" : "text-nutridex-text-secondary group-hover:text-nutridex-text-primary"
@@ -142,7 +160,7 @@ export function AppSidebar() {
               </Link>
             </li>
 
-            {isAuthenticated && user ? (
+            {mounted && isAuthenticated && user ? (
               <li>
                 <button
                   type="button"
@@ -153,7 +171,7 @@ export function AppSidebar() {
                   <span className="truncate">Cerrar sesión</span>
                 </button>
               </li>
-            ) : (
+            ) : mounted ? (
               <>
                 <li>
                   <button
@@ -176,7 +194,7 @@ export function AppSidebar() {
                   </button>
                 </li>
               </>
-            )}
+            ) : null}
           </ul>
         </div>
       </nav>

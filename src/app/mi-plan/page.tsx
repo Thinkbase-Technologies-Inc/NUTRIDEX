@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useMemo } from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import {
   CalendarDays,
   Plus,
@@ -397,7 +398,7 @@ export default function MiPlanPage() {
         </div>
 
         {/* Day Selector Strip */}
-        <div className="flex items-center justify-between p-3 overflow-x-auto no-scrollbar bg-nutridex-surface-muted/40">
+        <div className="flex items-center justify-between p-3 overflow-x-auto no-scrollbar bg-nutridex-surface-muted/40 relative">
           {weekDays.map((d) => {
             const active = d.dateStr === activeDate;
             return (
@@ -405,12 +406,23 @@ export default function MiPlanPage() {
                 key={d.dateStr}
                 type="button"
                 onClick={() => setActiveDate(d.dateStr)}
-                className={`flex-1 min-w-[70px] py-2 px-1 text-center rounded-2xl transition-all ${
+                className={`relative flex-1 min-w-[70px] py-2 px-1 text-center rounded-2xl transition-colors duration-150 z-10 ${
                   active
-                    ? "bg-nutridex-primary text-white font-bold shadow-xs scale-102"
-                    : "text-nutridex-text-secondary hover:text-nutridex-text-primary hover:bg-nutridex-surface"
+                    ? "text-white font-bold"
+                    : "text-nutridex-text-secondary hover:text-nutridex-text-primary hover:bg-nutridex-surface/60"
                 }`}
               >
+                {active && (
+                  <motion.div
+                    layoutId="activeDayPill"
+                    className="absolute inset-0 rounded-2xl bg-nutridex-primary shadow-xs -z-10"
+                    transition={{
+                      type: "spring",
+                      stiffness: 450,
+                      damping: 35,
+                    }}
+                  />
+                )}
                 <span className="text-lg font-extrabold block leading-none">{d.dayNum}</span>
                 <span className={`text-xs capitalize block mt-1 ${active ? "text-white" : "text-nutridex-text-secondary"}`}>
                   {d.dayName}

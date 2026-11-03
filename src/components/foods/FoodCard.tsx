@@ -54,14 +54,14 @@ export function FoodCard({ food, isFavorite, onToggleFavorite }: FoodCardProps) 
   const photo = FOOD_PHOTOS[food.id] ?? DEFAULT_FOOD_PHOTO;
 
   return (
-    <article className="group relative flex flex-col justify-between rounded-3xl border border-nutridex-border bg-nutridex-surface overflow-hidden shadow-xs transition-all duration-200 hover:-translate-y-1 hover:shadow-lg hover:border-nutridex-primary/30">
+    <article className="group relative flex flex-col justify-between rounded-3xl border border-nutridex-border bg-nutridex-surface overflow-hidden shadow-xs transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1.5 hover:shadow-xl hover:border-nutridex-primary/40">
       <div>
         {/* Photo Banner with Heart button */}
         <div className="relative h-36 w-full overflow-hidden bg-slate-900">
           <img
             src={photo}
             alt={food.name}
-            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+            className="h-full w-full object-cover transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-108"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
 
@@ -69,7 +69,7 @@ export function FoodCard({ food, isFavorite, onToggleFavorite }: FoodCardProps) 
           {group && (
             <div className="absolute top-3 left-3">
               <span
-                className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-bold text-white backdrop-blur-md shadow-xs"
+                className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-bold text-white backdrop-blur-md shadow-xs transition-transform duration-200 group-hover:scale-102"
                 style={{ backgroundColor: `${group.colorToken}E6` }}
               >
                 <Icons8Img src={getGroupIcon(group.id)} alt={group.name} size={15} />
@@ -93,13 +93,13 @@ export function FoodCard({ food, isFavorite, onToggleFavorite }: FoodCardProps) 
               }}
               aria-label={isFavorite ? `Quitar ${food.name} de favoritos` : `Agregar ${food.name} a favoritos`}
               aria-pressed={isFavorite}
-              className={`absolute top-3 right-3 flex h-8 w-8 items-center justify-center rounded-full backdrop-blur-md transition-all active:scale-90 ${
+              className={`absolute top-3 right-3 flex h-8 w-8 items-center justify-center rounded-full backdrop-blur-md transition-all duration-150 active:scale-75 ${
                 isFavorite
                   ? "bg-rose-500 text-white shadow-sm"
                   : "bg-black/40 text-white hover:bg-black/60"
               }`}
             >
-              <Heart className={`h-4 w-4 ${isFavorite ? "fill-white" : ""}`} aria-hidden />
+              <Heart className={`h-4 w-4 transition-transform ${isFavorite ? "fill-white scale-110" : ""}`} aria-hidden />
             </button>
           )}
 

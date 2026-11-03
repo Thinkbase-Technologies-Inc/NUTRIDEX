@@ -11,6 +11,7 @@ import { AuthModal } from "@/components/auth/AuthModal";
 import { AvatarModalWrapper } from "@/components/auth/AvatarModalWrapper";
 import { FullscreenSearch } from "@/components/search/FullscreenSearch";
 import { SplashScreen } from "@/components/ui/SplashScreen";
+import { PageTransition } from "@/components/shared/PageTransition";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -67,8 +68,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               <AppSidebar />
               <div className="flex min-h-dvh min-w-0 flex-1 flex-col md:pl-[240px]">
                 <DesktopHeader />
-                <main id="main-content" className="flex-1 min-w-0 pb-28 md:pb-8">
-                  {children}
+                <main id="main-content" className="flex-1 min-w-0 pb-28 md:pb-8 flex flex-col">
+                  <PageTransition>{children}</PageTransition>
                 </main>
                 <SiteFooter />
               </div>

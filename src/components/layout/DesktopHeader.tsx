@@ -23,6 +23,7 @@ import { Camera } from "lucide-react";
 
 export function DesktopHeader() {
   const [query, setQuery] = useState("");
+  const [mounted, setMounted] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -30,6 +31,10 @@ export function DesktopHeader() {
   const { openSearch } = useSearchStore();
   const { user, isAuthenticated, openAuthModal, logout, accounts, switchAccount, openAvatarModal } = useAuthStore();
   const { showToast } = useToast();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -99,7 +104,7 @@ export function DesktopHeader() {
         <NotificationDropdown />
 
         {/* User Capsule / Auth Controls */}
-        {isAuthenticated && user ? (
+        {mounted && isAuthenticated && user ? (
           <div className="relative shrink-0" ref={dropdownRef}>
             <button
               type="button"
@@ -214,7 +219,7 @@ export function DesktopHeader() {
               </div>
             )}
           </div>
-        ) : (
+        ) : mounted ? (
           <div className="flex items-center gap-2">
             <button
               type="button"
@@ -233,6 +238,8 @@ export function DesktopHeader() {
               <span>Registrarse</span>
             </button>
           </div>
+        ) : (
+          <div className="h-8 w-28 rounded-full bg-nutridex-surface-muted/60 animate-pulse border border-nutridex-border/60" />
         )}
       </div>
     </header>

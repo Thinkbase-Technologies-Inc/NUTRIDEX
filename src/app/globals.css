@@ -197,6 +197,57 @@ body {
   border-radius: 1.75rem;
 }
 
+/* NextJS Micro-interactions & Smooth Transitions */
+.nx-card-interactive {
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.2s ease;
+  will-change: transform, box-shadow;
+}
+
+.nx-card-interactive:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px -4px rgba(20, 40, 24, 0.08);
+}
+
+.nx-card-interactive:active {
+  transform: translateY(0) scale(0.99);
+}
+
+.nx-btn-press {
+  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+.nx-btn-press:active {
+  transform: scale(0.96);
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(34, 197, 94, 0);
+  }
+}
+
+.nx-pulse-glow {
+  animation: pulseGlow 2.5s infinite ease-in-out;
+}
+
+@keyframes floatGentle {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.nx-float {
+  animation: floatGentle 4s ease-in-out infinite;
+}
+
 /* Fixed Hardware-Accelerated Mobile Dock */
 .nx-mobile-dock {
   position: fixed;
